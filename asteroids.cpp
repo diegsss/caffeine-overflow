@@ -429,7 +429,7 @@ void init_opengl(void)
 	glEnable(GL_TEXTURE_2D);
 	initialize_fonts();
 
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 5; i++) {
 		glGenTextures(1, &gl->textures[i]);
 		glBindTexture(GL_TEXTURE_2D, gl->textures[i]);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
