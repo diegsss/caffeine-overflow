@@ -20,7 +20,8 @@
 #include <GL/glx.h>
 #include "log.h"
 #include "fonts.h"
-
+#include "Image.h"
+#include "diegoC.h"
 //defined types
 typedef float Flt;
 typedef float Vec[3];
@@ -60,13 +61,38 @@ class Global {
 public:
 	int xres, yres;
 	char keys[65536];
+	bool Credits;
+	bool GameMenu;
+	bool GameOver;
+	bool NewGame;
+	bool GameStart;
+	bool HowToPlay;
+	char *user;
+
+	GLuint textures[1];
+	static Global *instance;
+	static Global *getInstance() {
+		if (!instance) {
+			instance = new Global;
+		}
+		return instance;
+	}
 	Global() {
 		xres = 1250;
 		yres = 900;
 		memset(keys, 0, 65536);
+		Credits = false;
+		GameMenu = true;
+		GameOver = false;
+		NewGame = true;
+		GameStart = false;
+		HowToPlay = false;
 	}
-} gl;
+};
+Global *Global::instance = 0;
+Global *gl = gl->getInstance();
 
+//user player
 class Ship {
 public:
 	Vec dir;
@@ -77,8 +103,8 @@ public:
 public:
 	Ship() {
 		VecZero(dir);
-		pos[0] = (Flt)(gl.xres/2);
-		pos[1] = (Flt)(gl.yres/2);
+		pos[0] = (Flt)(gl->xres/2);
+		pos[1] = (Flt)(gl->yres/2);
 		pos[2] = 0.0f;
 		VecZero(vel);
 		angle = 0.0;
@@ -145,8 +171,8 @@ public:
 				a->vert[i][1] = cos(angle) * (r2 + rnd() * a->radius);
 				angle += inc;
 			}
-			a->pos[0] = (Flt)(rand() % gl.xres);
-			a->pos[1] = (Flt)(rand() % gl.yres);
+			a->pos[0] = (Flt)(rand() % gl->xres);
+			a->pos[1] = (Flt)(rand() % gl->yres);
 			a->pos[2] = 0.0f;
 			a->angle = 0.0;
 			a->rotate = rnd() * 4.0 - 2.0;
@@ -170,6 +196,13 @@ public:
 	}
 } g;
 
+Image img[5] = {
+	Image("./images/bomb.png"),
+	Image("./images/joseC.png"),
+	Image("./images/fahadA.png"),
+	Image("./images/rayanA.png"),
+	Image("./images/diegoC.png")
+};
 //X Windows variables
 class X11_wrapper {
 private:
@@ -182,7 +215,7 @@ public:
 		GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
 		//GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, None };
 		XSetWindowAttributes swa;
-		setup_screen_res(gl.xres, gl.yres);
+		setup_screen_res(gl->xres, gl->yres);
 		dpy = XOpenDisplay(NULL);
 		if (dpy == NULL) {
 			std::cout << "\n\tcannot connect to X server" << std::endl;
@@ -192,12 +225,12 @@ public:
 		XWindowAttributes getWinAttr;
 		XGetWindowAttributes(dpy, root, &getWinAttr);
 		int fullscreen=0;
-		gl.xres = w;
-		gl.yres = h;
+		gl->xres = w;
+		gl->yres = h;
 		if (!w && !h) {
 			//Go to fullscreen.
-			gl.xres = getWinAttr.width;
-			gl.yres = getWinAttr.height;
+			gl->xres = getWinAttr.width;
+			gl->yres = getWinAttr.height;
 			//When window is fullscreen, there is no client window
 			//so keystrokes are linked to the root window.
 			XGrabKeyboard(dpy, root, False,
@@ -219,7 +252,7 @@ public:
 			winops |= CWOverrideRedirect;
 			swa.override_redirect = True;
 		}
-		win = XCreateWindow(dpy, root, 0, 0, gl.xres, gl.yres, 0,
+		win = XCreateWindow(dpy, root, 0, 0, gl->xres, gl->yres, 0,
 			vi->depth, InputOutput, vi->visual, winops, &swa);
 		//win = XCreateWindow(dpy, root, 0, 0, gl.xres, gl.yres, 0,
 		//vi->depth, InputOutput, vi->visual, CWColormap | CWEventMask, &swa);
@@ -235,7 +268,7 @@ public:
 	void set_title() {
 		//Set the window title bar.
 		XMapWindow(dpy, win);
-		XStoreName(dpy, win, "Asteroids template");
+		XStoreName(dpy, win, "Escape from Grass");
 	}
 	void check_resize(XEvent *e) {
 		//The ConfigureNotify is sent by the
@@ -243,7 +276,7 @@ public:
 		if (e->type != ConfigureNotify)
 			return;
 		XConfigureEvent xce = e->xconfigure;
-		if (xce.width != gl.xres || xce.height != gl.yres) {
+		if (xce.width != gl->xres || xce.height != gl->yres) {
 			//Window size did change.
 			reshape_window(xce.width, xce.height);
 		}
@@ -254,12 +287,12 @@ public:
 		glViewport(0, 0, (GLint)width, (GLint)height);
 		glMatrixMode(GL_PROJECTION); glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW); glLoadIdentity();
-		glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
+		glOrtho(0, gl->xres, 0, gl->yres, -1, 1);
 		set_title();
 	}
 	void setup_screen_res(const int w, const int h) {
-		gl.xres = w;
-		gl.yres = h;
+		gl->xres = w;
+		gl->yres = h;
 	}
 	void swapBuffers() {
 		glXSwapBuffers(dpy, win);
@@ -298,14 +331,19 @@ public:
 		//it will undo the last change done by XDefineCursor
 		//(thus do only use ONCE XDefineCursor and then XUndefineCursor):
 	}
-} x11(0, 0);
+} x11(gl->xres, gl->yres);
 
 //function prototypes
+unsigned char *buildAlphaData(Image *img);
 void init_opengl(void);
 void check_mouse(XEvent *e);
 int check_keys(XEvent *e);
 void physics();
 void render();
+void show_credits();
+extern void menu();
+extern int nbuttons;
+extern Button button[];
 
 //==========================================================================
 // M A I N
@@ -331,7 +369,7 @@ int main()
 		timeCopy(&timeStart, &timeCurrent);
 		physicsCountdown += timeSpan;
 		while (physicsCountdown >= physicsRate) {
-			physics();
+			//physics();
 			physicsCountdown -= physicsRate;
 		}
 		render();
@@ -342,15 +380,43 @@ int main()
 	return 0;
 }
 
+unsigned char *buildAlphaData(Image *img) 
+{
+	int i;
+	unsigned char *newdata, *ptr;
+	unsigned char *data = (unsigned char *)img->data;
+	newdata = (unsigned char *)malloc(img->width * img->height * 4);
+	ptr = newdata;
+	unsigned char a,b,c;
+	unsigned char t0 = *(data + 0);
+	unsigned char t1 = *(data + 1);
+	unsigned char t2 = *(data + 2);
+	for (i = 0; i < img->width * img->height *3; i += 3) {
+		a = *(data + 0);
+		b = *(data + 1);
+		c = *(data + 2);
+		*(ptr + 0) = a;
+		*(ptr + 1) = b;
+		*(ptr + 2) = c;
+		*(ptr + 3) = 1;
+		if (a == t0 && b == t1 && c == t2) {
+			*(ptr + 3) = 0;
+		}
+		ptr += 4;
+		data += 3;
+	}
+	return newdata;
+}
+
 void init_opengl(void)
 {
 	//OpenGL initialization
-	glViewport(0, 0, gl.xres, gl.yres);
+	glViewport(0, 0, gl->xres, gl->yres);
 	//Initialize matrices
 	glMatrixMode(GL_PROJECTION); glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW); glLoadIdentity();
 	//This sets 2D mode (no perspective)
-	glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
+	glOrtho(0, gl->xres, 0, gl->yres, -1, 1);
 	//
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
@@ -362,7 +428,18 @@ void init_opengl(void)
 	//Do this to allow fonts
 	glEnable(GL_TEXTURE_2D);
 	initialize_fonts();
+
+	for (int i = 0; i < 1; i++) {
+		glGenTextures(1, &gl->textures[i]);
+		glBindTexture(GL_TEXTURE_2D, gl->textures[i]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, 3, img[i].width, img[i].height, 0,GL_RGB,
+				GL_UNSIGNED_BYTE, img[i].data);
+	}
 }
+
 
 void normalize2d(Vec v)
 {
@@ -481,30 +558,81 @@ int check_keys(XEvent *e)
 	int key = (XLookupKeysym(&e->xkey, 0) & 0x0000ffff);
 	//Log("key: %i\n", key);
 	if (e->type == KeyRelease) {
-		gl.keys[key]=0;
-		if (key == XK_Shift_L || key == XK_Shift_R)
+		gl->keys[key]=0;
+		/*if (key == XK_Shift_L || key == XK_Shift_R)
 			shift=0;
-		return 0;
+		return 0;*/
 	}
 	if (e->type == KeyPress) {
 		//std::cout << "press" << std::endl;
-		gl.keys[key]=1;
-		if (key == XK_Shift_L || key == XK_Shift_R) {
+		gl->keys[key]=1;
+		/*if (key == XK_Shift_L || key == XK_Shift_R) {
 			shift=1;
 			return 0;
-		}
+		}*/
 	} else {
 		return 0;
 	}
 	if (shift){}
 	switch (key) {
+		static int i = 0;
+		case XK_c:
+			gl->Credits ^= 1;
+			break;
 		case XK_Escape:
-			return 1;
-		case XK_f:
+			location = 0;
+			if (gl->Credits) {
+				gl->Credits ^= 1;
+			}
+			if(gl->GameStart) {
+				gl->GameMenu ^= 1;
+				gl->GameStart ^= 1;
+			}
+			if (gl->GameOver) {
+				gl->GameOver ^= 1;
+				gl->GameMenu ^= 1;
+			}
+			if (gl->HowToPlay) {
+				gl->HowToPlay ^= 1;
+			}
 			break;
 		case XK_s:
+			i++;
+			break;
+		case XK_Return:
+			if (gl->GameMenu) {
+				switch (location) {
+					case 0: 
+						gl->GameMenu ^= 1;
+						gl->GameStart ^= 1;
+						gl->NewGame = false;
+						break;
+					case 1:
+						gl->HowToPlay ^= 1;
+						break;
+					case 2:
+						break;
+					case 3:
+						gl->Credits ^= 1;
+						break;
+					case 4:
+						exit(0);
+				}
+			}
+			break;
+		case XK_Up:
+			if (location == 0) {
+				location = 4;
+			} else { 
+				location--;
+			}
 			break;
 		case XK_Down:
+			if (location == 4) {
+				location = 0;
+			} else {
+				location++;
+			}
 			break;
 		case XK_equal:
 			break;
@@ -513,7 +641,7 @@ int check_keys(XEvent *e)
 	}
 	return 0;
 }
-
+/*
 void deleteAsteroid(Game *g, Asteroid *node)
 {
 	//Remove a node from doubly-linked list
@@ -772,110 +900,42 @@ void physics()
 		if (tdif < -0.3)
 			g.mouseThrustOn = false;
 	}
-}
+}*/
 
 void render()
 {
-	Rect r;
 	glClear(GL_COLOR_BUFFER_BIT);
-	//
-	r.bot = gl.yres - 20;
-	r.left = 10;
-	r.center = 0;
-	ggprint8b(&r, 16, 0x00ff0000, "3350 - Asteroids");
-	ggprint8b(&r, 16, 0x00ffff00, "n bullets: %i", g.nbullets);
-	ggprint8b(&r, 16, 0x00ffff00, "n asteroids: %i", g.nasteroids);
-	//-------------------------------------------------------------------------
-	//Draw the ship
-	glColor3fv(g.ship.color);
-	glPushMatrix();
-	glTranslatef(g.ship.pos[0], g.ship.pos[1], g.ship.pos[2]);
-	//float angle = atan2(ship.dir[1], ship.dir[0]);
-	glRotatef(g.ship.angle, 0.0f, 0.0f, 1.0f);
-	glBegin(GL_TRIANGLES);
-	//glVertex2f(-10.0f, -10.0f);
-	//glVertex2f(  0.0f, 20.0f);
-	//glVertex2f( 10.0f, -10.0f);
-	glVertex2f(-12.0f, -10.0f);
-	glVertex2f(  0.0f, 20.0f);
-	glVertex2f(  0.0f, -6.0f);
-	glVertex2f(  0.0f, -6.0f);
-	glVertex2f(  0.0f, 20.0f);
-	glVertex2f( 12.0f, -10.0f);
-	glEnd();
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glBegin(GL_POINTS);
-	glVertex2f(0.0f, 0.0f);
-	glEnd();
-	glPopMatrix();
-	if (gl.keys[XK_Up] || g.mouseThrustOn) {
-		int i;
-		//draw thrust
-		Flt rad = ((g.ship.angle+90.0) / 360.0f) * PI * 2.0;
-		//convert angle to a vector
-		Flt xdir = cos(rad);
-		Flt ydir = sin(rad);
-		Flt xs,ys,xe,ye,r;
-		glBegin(GL_LINES);
-		for (i=0; i<16; i++) {
-			xs = -xdir * 11.0f + rnd() * 4.0 - 2.0;
-			ys = -ydir * 11.0f + rnd() * 4.0 - 2.0;
-			r = rnd()*40.0+40.0;
-			xe = -xdir * r + rnd() * 18.0 - 9.0;
-			ye = -ydir * r + rnd() * 18.0 - 9.0;
-			glColor3f(rnd()*.3+.7, rnd()*.3+.7, 0);
-			glVertex2f(g.ship.pos[0]+xs,g.ship.pos[1]+ys);
-			glVertex2f(g.ship.pos[0]+xe,g.ship.pos[1]+ye);
-		}
-		glEnd();
+
+	if (gl->GameMenu) {
+		glClear(GL_COLOR_BUFFER_BIT);
+		Menu(GL_TEXTURE_2D, gl->textures[0], gl->xres, gl->yres);
 	}
-	//-------------------------------------------------------------------------
-	//Draw the asteroids
-	{
-		Asteroid *a = g.ahead;
-		while (a) {
-			//Log("draw asteroid...\n");
-			glColor3fv(a->color);
-			glPushMatrix();
-			glTranslatef(a->pos[0], a->pos[1], a->pos[2]);
-			glRotatef(a->angle, 0.0f, 0.0f, 1.0f);
-			glBegin(GL_LINE_LOOP);
-			//Log("%i verts\n",a->nverts);
-			for (int j=0; j<a->nverts; j++) {
-				glVertex2f(a->vert[j][0], a->vert[j][1]);
-			}
-			glEnd();
-			//glBegin(GL_LINES);
-			//	glVertex2f(0,   0);
-			//	glVertex2f(a->radius, 0);
-			//glEnd();
-			glPopMatrix();
-			glColor3f(1.0f, 0.0f, 0.0f);
-			glBegin(GL_POINTS);
-			glVertex2f(a->pos[0], a->pos[1]);
-			glEnd();
-			a = a->next;
-		}
+	if (gl->Credits) {
+		show_credits();
 	}
-	//-------------------------------------------------------------------------
-	//Draw the bullets
-	for (int i=0; i<g.nbullets; i++) {
-		Bullet *b = &g.barr[i];
-		//Log("draw bullet...\n");
-		glColor3f(1.0, 1.0, 1.0);
-		glBegin(GL_POINTS);
-		glVertex2f(b->pos[0],      b->pos[1]);
-		glVertex2f(b->pos[0]-1.0f, b->pos[1]);
-		glVertex2f(b->pos[0]+1.0f, b->pos[1]);
-		glVertex2f(b->pos[0],      b->pos[1]-1.0f);
-		glVertex2f(b->pos[0],      b->pos[1]+1.0f);
-		glColor3f(0.8, 0.8, 0.8);
-		glVertex2f(b->pos[0]-1.0f, b->pos[1]-1.0f);
-		glVertex2f(b->pos[0]-1.0f, b->pos[1]+1.0f);
-		glVertex2f(b->pos[0]+1.0f, b->pos[1]-1.0f);
-		glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
-		glEnd();
+	if (gl->HowToPlay) {
+		HowToPlay(gl->xres, gl->yres);
 	}
+}
+void show_credits()
+{
+	extern void joseC(float, float, GLuint);
+    	extern void fahadA(int, int, GLuint);
+    	extern void rayanA(int, int, GLuint);
+	extern void diegoC(int, int, GLuint);
+		glClear(GL_COLOR_BUFFER_BIT);
+		Rect rcredits;
+		rcredits.bot = gl->yres * 0.95f;
+		rcredits.left = gl->xres/2;
+		rcredits.center = 0;
+		ggprint16(&rcredits, 16, 0x00ffff00, "Credits");
+
+		// moves pictures so they scale to monitors resolution
+		float offset = 0.18f;
+		joseC((gl->xres/2 - 300), gl->yres * (1 - offset*2), gl->textures[1]);
+		fahadA((gl->xres/2 - 300), gl->yres * (1 - offset*3), gl->textures[2]);
+		rayanA((gl->xres/2 - 300), gl->yres * (1 - offset*4), gl->textures[3]);
+		diegoC((gl->xres/2 - 300), gl->yres * (1 - offset), gl->textures[4]);
 }
 
 
