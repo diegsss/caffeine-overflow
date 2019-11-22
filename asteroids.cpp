@@ -60,6 +60,12 @@ extern void timeCopy(struct timespec *dest, struct timespec *source);
 //-----------------------------------------------------------------------------
 static Global& gl = Global::getInstance();
 
+bool Credits = false;
+bool GameMenu = true;
+bool GameOver = false;
+bool NewGame = true;
+bool StartGame = false;
+bool HowToPlay = false;
 //user player
 class Ship {
 public:
@@ -164,12 +170,17 @@ public:
 	}
 } g;
 
-Image img[5] = {
+Image img[10] = {
 	Image("./images/bomb.png"),
 	Image("./images/joseC.png"),
 	Image("./images/fahadA.png"),
 	Image("./images/rayanA.png"),
-	Image("./images/diegoC.png")
+	Image("./images/diegoC.png"),
+	Image("./images/tiles/1.png"),
+	Image("./images/tiles/2.png"),
+	Image("./images/tiles/3.png"),
+	Image("./images/tiles/4.png"),
+	Image("./images/tiles/5.png")
 };
 Image tiles[5] = {
 	Image("./images/tiles/1.png"),
@@ -319,6 +330,7 @@ void show_credits();
 extern void menu();
 extern int nbuttons;
 extern Button button[];
+extern void drawMap();
 
 //==========================================================================
 // M A I N
@@ -434,6 +446,51 @@ void init_opengl(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[4].width, img[4].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[4].data);
+	
+	glGenTextures(1, &gl.grassTile);
+	glBindTexture(GL_TEXTURE_2D, gl.grassTile);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[5].width, img[5].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
+	glActiveTexture(GL_TEXTURE0);
+
+	glGenTextures(1, &gl.roadTile);
+	glBindTexture(GL_TEXTURE_2D, gl.roadTile);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[6].width, img[6].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[6].data);
+	glActiveTexture(GL_TEXTURE0);
+
+	glGenTextures(1, &gl.blockTile);
+	glBindTexture(GL_TEXTURE_2D, gl.blockTile);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[7].width, img[7].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[7].data);
+	glActiveTexture(GL_TEXTURE0);
+	
+	glGenTextures(1, &gl.treeTile);
+	glBindTexture(GL_TEXTURE_2D, gl.treeTile);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[8].width, img[8].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[8].data);
+	glActiveTexture(GL_TEXTURE0);
+
+	glGenTextures(1, &gl.waterTile);
+	glBindTexture(GL_TEXTURE_2D, gl.waterTile);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[9].width, img[9].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[9].data);
+	glActiveTexture(GL_TEXTURE0);
 
 }
 
@@ -912,11 +969,17 @@ void render()
 		glClear(GL_COLOR_BUFFER_BIT);
 		Menu(GL_TEXTURE_2D, gl.menuTexture, gl.xres, gl.yres);
 	}
+	if (gl.GameStart) {
+		if (gl.currentMap == 1) {
+		}
+		drawMap();
+
+	}
 	if (gl.Credits) {
 		show_credits();
 	}
 	if (gl.HowToPlay) {
-		HowToPlay(gl.xres, gl.yres);
+		Guide(gl.xres, gl.yres);
 	}
 }
 void show_credits()

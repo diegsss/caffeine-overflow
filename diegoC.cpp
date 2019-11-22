@@ -15,7 +15,6 @@ static Global &gl = Global::getInstance();
 
 char map1[10] = "map.txt";
 
-Map getMap(int currentMap);
 
 int nbuttons = 0;
 int location = 0;
@@ -206,7 +205,7 @@ void Menu(GLenum target, GLuint texture, int xres, int yres)
 		ggprint16(&r, 0, button[i].text_color, button[i].text);
 	}    
 }
-void HowToPlay(int xres, int yres) 
+void Guide(int xres, int yres) 
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -265,17 +264,7 @@ Tile tilePosition(double width, double height, Tile tile)
 	}
 	return tile;
 }
-Map getMap(int currentMap) {
-	switch (currentMap) {
-		case 1:
-			return map1;
-		break;
-		default:
-			return nullptr;
-
-	}
-}
-void initMap()
+void drawMap()
 {
 	double width = 0;
 	double height = 0;
@@ -310,38 +299,4 @@ void initMap()
 		}
 		colId = (colId + 1) % gl.map.ncols;
 	}
-}
-void drawMap(int width, int length, GLuint id) 
-{
-	glColor3f(1.0, 1.0, 1.0);
-	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, id);
-	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 1.0f);glVertex2i(0, 0);
-		glTexCoord2f(0.0f, 0.0f);glVertex2i(0, length);
-		glTexCoord2f(1.0f, 0.0f);glVertex2i(length, width);
-		glTexCoord2f(1.0f, 1.0f);glVertex2i(0, 0);
-	glEnd();
-	glPopMatrix();
-
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-
-	glBegin(GL_QUADS);
-		glTexCoord2f(0, 0);glVertex2i(1.0f, 1.0f);
-		glTexCoord2f(1, 0);glVertex2i(-1.0f, 1.0f);
-		glTexCoord2f(1, 1);glVertex2i(-1.0f, -1.0f);
-		glTexCoord2f(1.0f, -1.0f);glVertex2i(1.0f, -1.0f);
-	glEnd();
-
-	glPopMatrix();
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-
-
 }

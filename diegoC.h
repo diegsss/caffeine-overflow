@@ -15,7 +15,7 @@ typedef struct t_button {
 } Button;
 
 void Menu(GLenum target, GLuint texture, int xres, int yres);
-void HowToPlay(int xres, int yres);
+void Guide(int xres, int yres);
 extern int location;
 
 #endif

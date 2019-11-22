@@ -19,7 +19,7 @@ struct Tile {
 
 class Map {
     public: 
-	Tile arr[70][70];
+	Tile arr[71][71];
 	int nrows, ncols;
 	int tilesize[2];
 	double dbsz[2];

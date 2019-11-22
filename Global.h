@@ -41,7 +41,6 @@ class Global {
 		int yres;
 		char keys[65536];
 		double camera[2];
-		int currentMap;
 		int player;
 		bool Credits;
 		bool GameMenu;
@@ -59,7 +58,6 @@ class Global {
 			camera[0] = camera[1] = 0.0;
 			memset(keys, 0 , 65536);
 			player = 1;
-			currentMap = 1;
 			map = Map(map1);
 			posArr = 1;
 			Credits = false;
