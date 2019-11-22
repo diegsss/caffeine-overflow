@@ -22,6 +22,8 @@
 #include "fonts.h"
 #include "Image.h"
 #include "diegoC.h"
+#include "Global.h"
+#include "Map.h"
 //defined types
 typedef float Flt;
 typedef float Vec[3];
@@ -56,41 +58,7 @@ extern double timeSpan;
 extern double timeDiff(struct timespec *start, struct timespec *end);
 extern void timeCopy(struct timespec *dest, struct timespec *source);
 //-----------------------------------------------------------------------------
-
-class Global {
-public:
-	int xres, yres;
-	char keys[65536];
-	bool Credits;
-	bool GameMenu;
-	bool GameOver;
-	bool NewGame;
-	bool GameStart;
-	bool HowToPlay;
-	char *user;
-
-	GLuint textures[1];
-	static Global *instance;
-	static Global *getInstance() {
-		if (!instance) {
-			instance = new Global;
-		}
-		return instance;
-	}
-	Global() {
-		xres = 1250;
-		yres = 900;
-		memset(keys, 0, 65536);
-		Credits = false;
-		GameMenu = true;
-		GameOver = false;
-		NewGame = true;
-		GameStart = false;
-		HowToPlay = false;
-	}
-};
-Global *Global::instance = 0;
-Global *gl = gl->getInstance();
+static Global& gl = Global::getInstance();
 
 //user player
 class Ship {
@@ -103,8 +71,8 @@ public:
 public:
 	Ship() {
 		VecZero(dir);
-		pos[0] = (Flt)(gl->xres/2);
-		pos[1] = (Flt)(gl->yres/2);
+		pos[0] = (Flt)(gl.xres/2);
+		pos[1] = (Flt)(gl.yres/2);
 		pos[2] = 0.0f;
 		VecZero(vel);
 		angle = 0.0;
@@ -171,8 +139,8 @@ public:
 				a->vert[i][1] = cos(angle) * (r2 + rnd() * a->radius);
 				angle += inc;
 			}
-			a->pos[0] = (Flt)(rand() % gl->xres);
-			a->pos[1] = (Flt)(rand() % gl->yres);
+			a->pos[0] = (Flt)(rand() % gl.xres);
+			a->pos[1] = (Flt)(rand() % gl.yres);
 			a->pos[2] = 0.0f;
 			a->angle = 0.0;
 			a->rotate = rnd() * 4.0 - 2.0;
@@ -203,6 +171,13 @@ Image img[5] = {
 	Image("./images/rayanA.png"),
 	Image("./images/diegoC.png")
 };
+Image tiles[5] = {
+	Image("./images/tiles/1.png"),
+	Image("./images/tiles/2.png"),
+	Image("./images/tiles/3.png"),
+	Image("./images/tiles/4.png"),
+	Image("./images/tiles/5.png")
+};
 //X Windows variables
 class X11_wrapper {
 private:
@@ -215,7 +190,7 @@ public:
 		GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
 		//GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, None };
 		XSetWindowAttributes swa;
-		setup_screen_res(gl->xres, gl->yres);
+		setup_screen_res(gl.xres, gl.yres);
 		dpy = XOpenDisplay(NULL);
 		if (dpy == NULL) {
 			std::cout << "\n\tcannot connect to X server" << std::endl;
@@ -225,12 +200,12 @@ public:
 		XWindowAttributes getWinAttr;
 		XGetWindowAttributes(dpy, root, &getWinAttr);
 		int fullscreen=0;
-		gl->xres = w;
-		gl->yres = h;
+		gl.xres = w;
+		gl.yres = h;
 		if (!w && !h) {
 			//Go to fullscreen.
-			gl->xres = getWinAttr.width;
-			gl->yres = getWinAttr.height;
+			gl.xres = getWinAttr.width;
+			gl.yres = getWinAttr.height;
 			//When window is fullscreen, there is no client window
 			//so keystrokes are linked to the root window.
 			XGrabKeyboard(dpy, root, False,
@@ -252,7 +227,7 @@ public:
 			winops |= CWOverrideRedirect;
 			swa.override_redirect = True;
 		}
-		win = XCreateWindow(dpy, root, 0, 0, gl->xres, gl->yres, 0,
+		win = XCreateWindow(dpy, root, 0, 0, gl.xres, gl.yres, 0,
 			vi->depth, InputOutput, vi->visual, winops, &swa);
 		//win = XCreateWindow(dpy, root, 0, 0, gl.xres, gl.yres, 0,
 		//vi->depth, InputOutput, vi->visual, CWColormap | CWEventMask, &swa);
@@ -276,7 +251,7 @@ public:
 		if (e->type != ConfigureNotify)
 			return;
 		XConfigureEvent xce = e->xconfigure;
-		if (xce.width != gl->xres || xce.height != gl->yres) {
+		if (xce.width != gl.xres || xce.height != gl.yres) {
 			//Window size did change.
 			reshape_window(xce.width, xce.height);
 		}
@@ -287,12 +262,12 @@ public:
 		glViewport(0, 0, (GLint)width, (GLint)height);
 		glMatrixMode(GL_PROJECTION); glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW); glLoadIdentity();
-		glOrtho(0, gl->xres, 0, gl->yres, -1, 1);
+		glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
 		set_title();
 	}
 	void setup_screen_res(const int w, const int h) {
-		gl->xres = w;
-		gl->yres = h;
+		gl.xres = w;
+		gl.yres = h;
 	}
 	void swapBuffers() {
 		glXSwapBuffers(dpy, win);
@@ -331,7 +306,7 @@ public:
 		//it will undo the last change done by XDefineCursor
 		//(thus do only use ONCE XDefineCursor and then XUndefineCursor):
 	}
-} x11(gl->xres, gl->yres);
+} x11(gl.xres, gl.yres);
 
 //function prototypes
 unsigned char *buildAlphaData(Image *img);
@@ -411,12 +386,12 @@ unsigned char *buildAlphaData(Image *img)
 void init_opengl(void)
 {
 	//OpenGL initialization
-	glViewport(0, 0, gl->xres, gl->yres);
+	glViewport(0, 0, gl.xres, gl.yres);
 	//Initialize matrices
 	glMatrixMode(GL_PROJECTION); glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW); glLoadIdentity();
 	//This sets 2D mode (no perspective)
-	glOrtho(0, gl->xres, 0, gl->yres, -1, 1);
+	glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
 	//
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
@@ -428,16 +403,38 @@ void init_opengl(void)
 	//Do this to allow fonts
 	glEnable(GL_TEXTURE_2D);
 	initialize_fonts();
+	
+	glGenTextures(1, &gl.menuTexture);
+	glBindTexture(GL_TEXTURE_2D, gl.menuTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[0].width, img[0].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
+	
+	glGenTextures(1, &gl.joseCTexture);
+	glBindTexture(GL_TEXTURE_2D, gl.joseCTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[1].width, img[1].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
+	
+	glGenTextures(1, &gl.fahadATexture);
+	glBindTexture(GL_TEXTURE_2D, gl.fahadATexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[2].width, img[2].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[2].data);
+	
+	
+	glGenTextures(1, &gl.rayanATexture);
+	glBindTexture(GL_TEXTURE_2D, gl.rayanATexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[3].width, img[3].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
 
-	for (int i = 0; i < 5; i++) {
-		glGenTextures(1, &gl->textures[i]);
-		glBindTexture(GL_TEXTURE_2D, gl->textures[i]);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glGenTextures(1, &gl.diegoCTexture);
+	glBindTexture(GL_TEXTURE_2D, gl.diegoCTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[4].width, img[4].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[4].data);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, 3, img[i].width, img[i].height, 0,GL_RGB,
-				GL_UNSIGNED_BYTE, img[i].data);
-	}
 }
 
 
@@ -558,14 +555,14 @@ int check_keys(XEvent *e)
 	int key = (XLookupKeysym(&e->xkey, 0) & 0x0000ffff);
 	//Log("key: %i\n", key);
 	if (e->type == KeyRelease) {
-		gl->keys[key]=0;
+		gl.keys[key]=0;
 		/*if (key == XK_Shift_L || key == XK_Shift_R)
 			shift=0;
 		return 0;*/
 	}
 	if (e->type == KeyPress) {
 		//std::cout << "press" << std::endl;
-		gl->keys[key]=1;
+		gl.keys[key]=1;
 		/*if (key == XK_Shift_L || key == XK_Shift_R) {
 			shift=1;
 			return 0;
@@ -577,43 +574,43 @@ int check_keys(XEvent *e)
 	switch (key) {
 		static int i = 0;
 		case XK_c:
-			gl->Credits ^= 1;
+			gl.Credits ^= 1;
 			break;
 		case XK_Escape:
 			location = 0;
-			if (gl->Credits) {
-				gl->Credits ^= 1;
+			if (gl.Credits) {
+				gl.Credits ^= 1;
 			}
-			if(gl->GameStart) {
-				gl->GameMenu ^= 1;
-				gl->GameStart ^= 1;
+			if(gl.GameStart) {
+				gl.GameMenu ^= 1;
+				gl.GameStart ^= 1;
 			}
-			if (gl->GameOver) {
-				gl->GameOver ^= 1;
-				gl->GameMenu ^= 1;
+			if (gl.GameOver) {
+				gl.GameOver ^= 1;
+				gl.GameMenu ^= 1;
 			}
-			if (gl->HowToPlay) {
-				gl->HowToPlay ^= 1;
+			if (gl.HowToPlay) {
+				gl.HowToPlay ^= 1;
 			}
 			break;
 		case XK_s:
 			i++;
 			break;
 		case XK_Return:
-			if (gl->GameMenu) {
+			if (gl.GameMenu) {
 				switch (location) {
 					case 0: 
-						gl->GameMenu ^= 1;
-						gl->GameStart ^= 1;
-						gl->NewGame = false;
+						gl.GameMenu ^= 1;
+						gl.GameStart ^= 1;
+						gl.NewGame = false;
 						break;
 					case 1:
-						gl->HowToPlay ^= 1;
+						gl.HowToPlay ^= 1;
 						break;
 					case 2:
 						break;
 					case 3:
-						gl->Credits ^= 1;
+						gl.Credits ^= 1;
 						break;
 					case 4:
 						exit(0);
@@ -904,17 +901,22 @@ void physics()
 
 void render()
 {
+	Rect r;
 	glClear(GL_COLOR_BUFFER_BIT);
+	r.bot = gl.yres - 20;
+	r.left = 10;
+	r.center = 0;
+	ggprint16(&r, 16 , 0x00ff0000, "Escape from Grass");
 
-	if (gl->GameMenu) {
+	if (gl.GameMenu) {
 		glClear(GL_COLOR_BUFFER_BIT);
-		Menu(GL_TEXTURE_2D, gl->textures[0], gl->xres, gl->yres);
+		Menu(GL_TEXTURE_2D, gl.menuTexture, gl.xres, gl.yres);
 	}
-	if (gl->Credits) {
+	if (gl.Credits) {
 		show_credits();
 	}
-	if (gl->HowToPlay) {
-		HowToPlay(gl->xres, gl->yres);
+	if (gl.HowToPlay) {
+		HowToPlay(gl.xres, gl.yres);
 	}
 }
 void show_credits()
@@ -925,17 +927,17 @@ void show_credits()
 	extern void diegoC(int, int, GLuint);
 		glClear(GL_COLOR_BUFFER_BIT);
 		Rect rcredits;
-		rcredits.bot = gl->yres * 0.95f;
-		rcredits.left = gl->xres/2;
+		rcredits.bot = gl.yres * 0.95f;
+		rcredits.left = gl.xres/2;
 		rcredits.center = 0;
 		ggprint16(&rcredits, 16, 0x00ffff00, "Credits");
 
 		// moves pictures so they scale to monitors resolution
 		float offset = 0.18f;
-		joseC((gl->xres/2 - 300), gl->yres * (1 - offset*2), gl->textures[1]);
-		fahadA((gl->xres/2 - 300), gl->yres * (1 - offset*3), gl->textures[2]);
-		rayanA((gl->xres/2 - 300), gl->yres * (1 - offset*4), gl->textures[3]);
-		diegoC((gl->xres/2 - 300), gl->yres * (1 - offset), gl->textures[4]);
+		joseC((gl.xres/2 - 300), gl.yres * (1 - offset*2), gl.joseCTexture);
+		fahadA((gl.xres/2 - 300), gl.yres * (1 - offset*3), gl.fahadATexture);
+		rayanA((gl.xres/2 - 300), gl.yres * (1 - offset*4), gl.rayanATexture);
+		diegoC((gl.xres/2 - 300), gl.yres * (1 - offset), gl.diegoCTexture);
 }
 
 
