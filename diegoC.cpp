@@ -8,11 +8,20 @@
 #include <sstream>
 #include "fonts.h"
 #include "diegoC.h"
+#include "Global.h"
 #define MAXBUTTONS 5
+
+static Global &gl = Global::getInstance();
+
+char map1[10] = "map.txt";
+
+Map getMap(int currentMap);
 
 int nbuttons = 0;
 int location = 0;
 Button button[MAXBUTTONS];
+
+Map m1(map1);
 
 void diegoC (int x, int y, GLuint textid)
 {
@@ -211,9 +220,128 @@ void HowToPlay(int xres, int yres)
 	ggprint16(&HowToPlay, 0 ,0xffffffff, "Use arrow keys to move");
 	HowToPlay.bot = yres * 0.75f;
 	HowToPlay.left = xres/4;
-	ggprint16(&HowToPlay, 0 ,0xffffffff, "Battle enemies by getting their attention");
+	ggprint16(&HowToPlay, 0 ,0xffffffff, "You are trapped in a maze and have to escape!");
 	HowToPlay.bot = yres * 0.65f;
 	HowToPlay.left = xres/4;
-	ggprint16(&HowToPlay, 0 ,0xffffffff, "Defeat all enemies to win");
+	ggprint16(&HowToPlay, 0 ,0xffffffff, "Make it out the maze to win, be careful some tiles have bombs!");
+
+}
+void generateTexture(int glSize, GLuint &textID, Image img)
+{
+	glGenTextures(glSize, &textID);
+	glBindTexture(GL_TEXTURE_2D, textID);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, img.width, img.height, 0, GL_RGB, GL_UNSIGNED_BYTE, img.data);
+	glActiveTexture(GL_TEXTURE0);
+}
+void drawTile(int width, int length, GLuint id)
+{
+	double fx = (double) width;
+	double fy = (double) length;
+
+	int x = gl.map.tilesize[0];
+	int y = gl.map.tilesize[1];
+
+	glColor3ub(255, 255, 255);
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, id);
+	glTranslated(fx, fy, 0);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 0.0f);glVertex2i(0,0);
+		glTexCoord2f(0.0f, 1.0f);glVertex2i(0,-y);
+		glTexCoord2f(1.0f, 1.0f);glVertex2i(x,-y);
+		glTexCoord2f(1.0f, 0.0f);glVertex2i(x,0);
+	glEnd();
+	glPopMatrix();
+}
+Tile tilePosition(double width, double height, Tile tile)
+{
+	if(tile.identity != 0) {
+		tile.pos.x = width;
+		tile.pos.y = height;
+	}
+	return tile;
+}
+Map getMap(int currentMap) {
+	switch (currentMap) {
+		case 1:
+			return map1;
+		break;
+		default:
+			return nullptr;
+
+	}
+}
+void initMap()
+{
+	double width = 0;
+	double height = 0;
+	int renderCols = gl.xres / gl.map.tilesize[0] + 2;
+	int colId = static_cast<int>((int) gl.camera[0] / gl.map.dbsz[0]);
+	for (int cols = 0; cols < renderCols; cols++) {
+		int rowId = gl.map.nrows -1;
+		for (int rows = 0; rows < gl.map.nrows; rows++) {
+			width = colId * gl.map.dbsz[0];
+			height = rows * gl.map.dbsz[1];
+			if (gl.map.arr[rowId][colId].identity == '1') {
+				drawTile(width, height, gl.grassTile);
+				gl.map.arr[rowId][colId] = tilePosition(width, height, gl.map.arr[rowId][colId]);
+			}
+			if (gl.map.arr[rowId][colId].identity == '2') {
+				drawTile(width, height, gl.roadTile);
+				gl.map.arr[rowId][colId] = tilePosition(width, height, gl.map.arr[rowId][colId]);
+			}
+			if (gl.map.arr[rowId][colId].identity == '3') {
+				drawTile(width, height, gl.blockTile);
+				gl.map.arr[rowId][colId] = tilePosition(width, height, gl.map.arr[rowId][colId]);
+			}
+			if (gl.map.arr[rowId][colId].identity == '4') {
+				drawTile(width, height, gl.treeTile);
+				gl.map.arr[rowId][colId] = tilePosition(width, height, gl.map.arr[rowId][colId]);
+			}
+			if (gl.map.arr[rowId][colId].identity == '5') {
+				drawTile(width, height, gl.waterTile);
+				gl.map.arr[rowId][colId] = tilePosition(width, height, gl.map.arr[rowId][colId]);
+			}
+			--rowId;
+		}
+		colId = (colId + 1) % gl.map.ncols;
+	}
+}
+void drawMap(int width, int length, GLuint id) 
+{
+	glColor3f(1.0, 1.0, 1.0);
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, id);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f);glVertex2i(0, 0);
+		glTexCoord2f(0.0f, 0.0f);glVertex2i(0, length);
+		glTexCoord2f(1.0f, 0.0f);glVertex2i(length, width);
+		glTexCoord2f(1.0f, 1.0f);glVertex2i(0, 0);
+	glEnd();
+	glPopMatrix();
+
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glBegin(GL_QUADS);
+		glTexCoord2f(0, 0);glVertex2i(1.0f, 1.0f);
+		glTexCoord2f(1, 0);glVertex2i(-1.0f, 1.0f);
+		glTexCoord2f(1, 1);glVertex2i(-1.0f, -1.0f);
+		glTexCoord2f(1.0f, -1.0f);glVertex2i(1.0f, -1.0f);
+	glEnd();
+
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+
 
 }

@@ -4,7 +4,9 @@
 #include <GL/glx.h>
 #include "fonts.h"
 #include "fahadA.h"
+#include "Global.h"
 
+static Global &gl = Global::getInstance();
 
 void fahadA(int x, int y, GLuint id)
 {

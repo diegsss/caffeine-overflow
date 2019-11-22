@@ -3,7 +3,9 @@
 #include "joseC.h"
 #include <GL/glx.h>
 #include "fonts.h"
+#include "Global.h"
 
+static Global &gl = Global::getInstance();
 
 void joseC(float x, float y, GLuint textid)
 {

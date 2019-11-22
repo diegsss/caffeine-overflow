@@ -3,7 +3,9 @@
 #include <GL/glx.h>
 #include "fonts.h"
 #include "rayanA.h"
+#include "Global.h"
 
+static Global &gl = Global::getInstance();
 
 void rayanA(int x, int y, GLuint textureId)
 {
