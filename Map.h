@@ -19,7 +19,7 @@ struct Tile {
 
 class Map {
     public: 
-	Tile arr[71][71];
+	Tile arr[70][70];
 	int nrows, ncols;
 	int tilesize[2];
 	double dbsz[2];
@@ -50,7 +50,7 @@ class Map {
 		    ++nrows;
 		}
 		fclose(fpi);
-		//printf("nrows of background data: %i\n", nrows);
+		printf("nrows of background data: %i\n", nrows);
 	    }
 	    for (int i=0; i<nrows; i++) {
 		for (int j=0; j<ncols; j++) {

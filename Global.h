@@ -13,6 +13,7 @@
 #include "log.h"
 #include "Image.h"
 #include "Map.h"
+#include "Sprite.h"
 #include "diegoC.h"
 #include "joseC.h"
 #include "fahadA.h"
@@ -24,6 +25,7 @@ class Global {
 			static Global instance;
 			return instance;
 		}
+		Sprite testing;
 		Map map;
 		GLuint playerTexture;
 		GLuint menuTexture;

@@ -1,13 +1,18 @@
 //Author: Diego Chavez
 //
+#include "math.h"
 #include <GL/glx.h>
+#include <X11/Xlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include "string.h"
+#include "log.h"
 #include "fonts.h"
 #include "diegoC.h"
+#include "Map.h"
 #include "Global.h"
 #define MAXBUTTONS 5
 
@@ -21,6 +26,8 @@ int location = 0;
 Button button[MAXBUTTONS];
 
 Map m1(map1);
+
+void Camera();
 
 void diegoC (int x, int y, GLuint textid)
 {
@@ -299,4 +306,42 @@ void drawMap()
 		}
 		colId = (colId + 1) % gl.map.ncols;
 	}
+}
+void Camera() 
+{
+    if (gl.keys[XK_Right]) {
+        if (gl.testing.pos.x < 10) {
+            gl.testing.pos.x = 10;
+            gl.camera[0] = 0.0;
+        }
+
+        if (gl.testing.pos.x > gl.xres / 2 + 100) {
+            printf("left");
+
+        }
+        gl.camera[0] -= 1;
+
+
+        if (gl.camera[0] < 0.0) {
+            gl.camera[0] = 0.0;
+        }
+    }
+
+    if (gl.keys[XK_Left]) {
+        if (gl.testing.pos.x < gl.xres / 2 - 100) {
+            printf("right");
+
+        }
+        gl.camera[0] += 1;
+
+        if (gl.camera[0] < 0.0) {
+            gl.camera[0] = 0.0;
+        }
+
+        if (gl.testing.pos.x > gl.xres) {
+            gl.testing.pos.x = gl.xres;
+            gl.camera[0] = 0.0;
+        }
+    }
+
 }

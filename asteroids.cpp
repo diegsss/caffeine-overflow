@@ -317,7 +317,7 @@ public:
 		//it will undo the last change done by XDefineCursor
 		//(thus do only use ONCE XDefineCursor and then XUndefineCursor):
 	}
-} x11(gl.xres, gl.yres);
+} x11(0, 0);
 
 //function prototypes
 unsigned char *buildAlphaData(Image *img);
@@ -330,6 +330,7 @@ void show_credits();
 extern void menu();
 extern int nbuttons;
 extern Button button[];
+extern void drawTile(int width, int length, GLuint id);
 extern void drawMap();
 
 //==========================================================================
@@ -453,7 +454,7 @@ void init_opengl(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[5].width, img[5].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img[5].width, img[5].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
 	glActiveTexture(GL_TEXTURE0);
 
 	glGenTextures(1, &gl.roadTile);
@@ -462,7 +463,7 @@ void init_opengl(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[6].width, img[6].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[6].data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img[6].width, img[6].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[6].data);
 	glActiveTexture(GL_TEXTURE0);
 
 	glGenTextures(1, &gl.blockTile);
@@ -471,7 +472,7 @@ void init_opengl(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[7].width, img[7].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[7].data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img[7].width, img[7].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[7].data);
 	glActiveTexture(GL_TEXTURE0);
 	
 	glGenTextures(1, &gl.treeTile);
@@ -480,7 +481,7 @@ void init_opengl(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[8].width, img[8].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[8].data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img[8].width, img[8].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[8].data);
 	glActiveTexture(GL_TEXTURE0);
 
 	glGenTextures(1, &gl.waterTile);
@@ -489,7 +490,7 @@ void init_opengl(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[9].width, img[9].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[9].data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img[9].width, img[9].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[9].data);
 	glActiveTexture(GL_TEXTURE0);
 
 }
@@ -970,8 +971,6 @@ void render()
 		Menu(GL_TEXTURE_2D, gl.menuTexture, gl.xres, gl.yres);
 	}
 	if (gl.GameStart) {
-		if (gl.currentMap == 1) {
-		}
 		drawMap();
 
 	}
