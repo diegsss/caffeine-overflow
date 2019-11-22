@@ -41,6 +41,7 @@ class Map {
 		    removeCrLf(line);
 		    int slen = strlen(line);
 		    ncols = slen;
+            //printf("%i\n", ncols);
 		    //Log("line: %s\n", line);
 		    for (int j=0; j<slen; j++) {
 			arr[nrows][j].identity = line[j];

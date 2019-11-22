@@ -25,7 +25,7 @@ int nbuttons = 0;
 int location = 0;
 Button button[MAXBUTTONS];
 
-Map m1(map1);
+// Map m1(map1);
 
 void Camera();
 

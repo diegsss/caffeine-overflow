@@ -10,14 +10,14 @@ class Image {
 	public:
 		int width;
 		int height;
-		int rows;
+		/*int rows;
 		int columns;
 		int frame;
 		int frameCounter;
-		int animation;
+		int animation;*/
 		unsigned char *data;
 		const char *file;
-		Image(const char *f, int r = 0, int c =0);
+		Image(const char *fname);
 		~Image();
 
 };
