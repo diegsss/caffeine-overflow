@@ -1,10 +1,6 @@
 #include "Image.h"
 
 Image::Image(const char *fname) {
-	/*file = fname;
-	rows = row;
-	columns = col;
-	frameCounter = frame = animation = 0;*/
 	if (fname[0] == '\0') {
 		return;
 	}

@@ -10,11 +10,6 @@ class Image {
 	public:
 		int width;
 		int height;
-		/*int rows;
-		int columns;
-		int frame;
-		int frameCounter;
-		int animation;*/
 		unsigned char *data;
 		const char *file;
 		Image(const char *fname);

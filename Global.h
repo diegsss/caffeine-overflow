@@ -27,6 +27,7 @@ class Global {
 		}
 		Sprite testing;
 		Map map;
+		Image *playerImage;
 		GLuint playerTexture;
 		GLuint menuTexture;
 		GLuint diegoCTexture;
@@ -51,12 +52,17 @@ class Global {
 		bool GameStart;
 		bool HowToPlay;
 		int posArr;
+		bool collsion;
+		int walk;
+		int walkFrame;
 		char *user;
 	private:
 		char map1[10] = "map.txt";
 		Global() {
+			walk = 0;
+			walkFrame = 0;
 			xres = 800;
-			yres = 800;
+			yres = 600;
 			camera[0] = camera[1] = 0.0;
 			memset(keys, 0 , 65536);
 			player = 1;
