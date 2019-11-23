@@ -170,7 +170,7 @@ public:
 	}
 } g;
 
-Image img[10] = {
+Image img[11] = {
 	Image("./images/bomb.png"),
 	Image("./images/joseC.png"),
 	Image("./images/fahadA.png"),
@@ -180,14 +180,8 @@ Image img[10] = {
 	Image("./images/tiles/2.png"),
 	Image("./images/tiles/3.png"),
 	Image("./images/tiles/4.png"),
-	Image("./images/tiles/5.png")
-};
-Image tiles[5] = {
-	Image("./images/tiles/1.png"),
-	Image("./images/tiles/2.png"),
-	Image("./images/tiles/3.png"),
-	Image("./images/tiles/4.png"),
-	Image("./images/tiles/5.png")
+	Image("./images/tiles/5.png"),
+	Image("./images/monsterBomb.png")
 };
 //X Windows variables
 class X11_wrapper {
@@ -332,6 +326,7 @@ extern int nbuttons;
 extern Button button[];
 extern void drawTile(int width, int length, GLuint id);
 extern void drawMap();
+extern void drawSprite(int x, int y, GLuint textid);
 
 //==========================================================================
 // M A I N
@@ -492,6 +487,9 @@ void init_opengl(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img[9].width, img[9].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[9].data);
 	glActiveTexture(GL_TEXTURE0);
+
+	glGenTextures(1, &gl.playerTexture);
+
 
 }
 
@@ -972,6 +970,11 @@ void render()
 	}
 	if (gl.GameStart) {
 		drawMap();
+
+	}
+	if (gl.GameStart && gl.player) {
+		drawSprite(gl.testing.pos.x, gl.testing.pos.y, gl.playerTexture);
+		//drawMap();
 
 	}
 	if (gl.Credits) {

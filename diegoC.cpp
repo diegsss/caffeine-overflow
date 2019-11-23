@@ -345,7 +345,8 @@ void Camera()
     }
 
 }
-void initSprite(int cx, int cy, GLuint textid) {
+void drawSprite(int cx, int cy, GLuint textid) 
+{
 	
 	glBindTexture(GL_TEXTURE_2D, textid);
 	glColor3ub(0,0,0);

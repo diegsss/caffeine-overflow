@@ -74,6 +74,9 @@ class Global {
 			NewGame = true;
 			GameStart = false;
 			HowToPlay = false;
+
+			testing.pos.x = 400;
+			testing.pos.y = 500;
 		}
 	Global(Global const&);
 	void operator=(Global const&);
