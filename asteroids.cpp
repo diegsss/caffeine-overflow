@@ -973,7 +973,7 @@ void render()
 
 	}
 	if (gl.GameStart && gl.player) {
-		drawSprite(gl.testing.pos.x, gl.testing.pos.y, gl.playerTexture);
+		drawSprite(gl.sprite.pos.x, gl.sprite.pos.y, gl.playerTexture);
 		//drawMap();
 
 	}

@@ -310,12 +310,12 @@ void drawMap()
 void Camera() 
 {
     if (gl.keys[XK_Right]) {
-        if (gl.testing.pos.x < 10) {
-            gl.testing.pos.x = 10;
+        if (gl.sprite.pos.x < 10) {
+            gl.sprite.pos.x = 10;
             gl.camera[0] = 0.0;
         }
 
-        if (gl.testing.pos.x > gl.xres / 2 + 100) {
+        if (gl.sprite.pos.x > gl.xres / 2 + 100) {
             printf("left");
 
         }
@@ -328,7 +328,7 @@ void Camera()
     }
 
     if (gl.keys[XK_Left]) {
-        if (gl.testing.pos.x < gl.xres / 2 - 100) {
+        if (gl.sprite.pos.x < gl.xres / 2 - 100) {
             printf("right");
 
         }
@@ -338,8 +338,8 @@ void Camera()
             gl.camera[0] = 0.0;
         }
 
-        if (gl.testing.pos.x > gl.xres) {
-            gl.testing.pos.x = gl.xres;
+        if (gl.sprite.pos.x > gl.xres) {
+            gl.sprite.pos.x = gl.xres;
             gl.camera[0] = 0.0;
         }
     }

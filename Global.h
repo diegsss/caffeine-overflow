@@ -25,7 +25,7 @@ class Global {
 			static Global instance;
 			return instance;
 		}
-		Sprite testing;
+		Sprite sprite;
 		Map map;
 		Image *playerImage;
 		GLuint playerTexture;
@@ -75,8 +75,8 @@ class Global {
 			GameStart = false;
 			HowToPlay = false;
 
-			testing.pos.x = 400;
-			testing.pos.y = 500;
+			sprite.pos.x = 400;
+			sprite.pos.y = 500;
 		}
 	Global(Global const&);
 	void operator=(Global const&);
