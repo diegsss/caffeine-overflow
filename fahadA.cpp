@@ -1,5 +1,13 @@
-// Program: fahadA.cpp
-// Author: Fahad Alqahtani
+/*
+ * Fahad alqahtani
+ * -steps to dbug
+ *  1 reprduce the bug
+ *  2 locate the bad code
+ *  3 fix the code
+ *  4 test the fix
+ *	
+ *
+ * */
 
 #include <GL/glx.h>
 #include "fonts.h"

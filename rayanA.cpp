@@ -1,5 +1,13 @@
-//Author: Rayan Alsabr
+//rayan alsabr
+//lab
 
+/*
+ - Steps to dbug
+   1 reprduce the bug
+   2 locate the bad code
+   3 fix the code
+   4 test the fix
+*/
 #include <GL/glx.h>
 #include "fonts.h"
 #include "rayanA.h"

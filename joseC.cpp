@@ -1,5 +1,10 @@
-//Author Jose Chavez
-
+// Jose Chavez
+// 4 steps of debugging
+// - reproduce the bug
+// - Locate the bad code
+// - Fix the code
+// - Test the fix
+//
 #include "joseC.h"
 #include <GL/glx.h>
 #include "fonts.h"

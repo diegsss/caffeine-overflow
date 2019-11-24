@@ -1,5 +1,15 @@
-//Author: Diego Chavez
-//
+/*Author: Diego Chavez
+ *
+ * 4 Steps to debugging
+ * 1. Reproduce the problem
+ * 2. locate the bad code
+ * 3. fix the bad code
+ * 4. tes the fix
+ *
+ *
+ *
+ *
+ * */
 #include "math.h"
 #include <GL/glx.h>
 #include <X11/Xlib.h>
