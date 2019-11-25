@@ -8,6 +8,6 @@ escape_from_grass: $(CPP)
 	g++ $(CFLAGS) $(CPP) $(FONT) -Wall -Wextra $(LFLAGS) -oescape_from_grass
 
 clean:
-	rm -f asteroids
+	rm -f escape_from_grass
 	rm -f *.o
 
