@@ -220,10 +220,19 @@ void Menu(GLenum target, GLuint texture, int xres, int yres)
 		r.center = 1;
 		
 		ggprint16(&r, 0, button[i].text_color, button[i].text);
-	}    
+	} 
+     glEnd();	
 }
-void Guide(int xres, int yres) 
+void Guide(GLenum target, GLuint texture, int xres, int yres) 
 {
+	glBindTexture(target, texture);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres); 
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	Rect HowToPlay;
@@ -240,6 +249,22 @@ void Guide(int xres, int yres)
 	HowToPlay.bot = yres * 0.65f;
 	HowToPlay.left = xres/4;
 	ggprint16(&HowToPlay, 0 ,0xffffffff, "Make it out the maze to win, be careful some tiles have bombs!");
+	
+	glEnd();
+}
+void Credits_Background(GLenum target, GLuint texture, int xres, int yres)
+{
+	glBindTexture(target, texture);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres); 
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	//glEnd();
 
 }
 void generateTexture(int glSize, GLuint &textID, Image img)

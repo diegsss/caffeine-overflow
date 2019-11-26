@@ -29,6 +29,8 @@ class Global {
 		Map map;
 		Image *playerImage;
 		GLuint playerTexture;
+		GLuint guideTexture;
+		GLuint creditsTexture;
 		GLuint menuTexture;
 		GLuint diegoCTexture;
 		GLuint joseCTexture;

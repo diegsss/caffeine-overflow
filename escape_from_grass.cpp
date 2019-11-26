@@ -170,7 +170,7 @@ public:
 	}
 } g;
 
-Image img[11] = {
+Image img[12] = {
 	Image("./images/bomb.png"),
 	Image("./images/joseC.png"),
 	Image("./images/fahadA.png"),
@@ -181,7 +181,8 @@ Image img[11] = {
 	Image("./images/tiles/3.png"),
 	Image("./images/tiles/4.png"),
 	Image("./images/tiles/5.png"),
-	Image("./images/monsterBomb.png")
+	Image("./images/monsterBomb.png"),
+	Image("./images/forest.png")
 };
 //X Windows variables
 class X11_wrapper {
@@ -416,8 +417,20 @@ void init_opengl(void)
 	glBindTexture(GL_TEXTURE_2D, gl.menuTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[0].width, img[0].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[11].width, img[11].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[11].data);
 	
+	glGenTextures(1, &gl.guideTexture);
+	glBindTexture(GL_TEXTURE_2D, gl.guideTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[11].width, img[11].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[11].data);
+
+	glGenTextures(1, &gl.creditsTexture);
+	glBindTexture(GL_TEXTURE_2D, gl.creditsTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[0].width, img[0].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
+
 	glGenTextures(1, &gl.joseCTexture);
 	glBindTexture(GL_TEXTURE_2D, gl.joseCTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -978,14 +991,17 @@ void render()
 
 	}
 	if (gl.Credits) {
+		//Credits_Background(GL_TEXTURE_2D, gl.creditsTexture, gl.xres, gl.yres);
 		show_credits();
 	}
 	if (gl.HowToPlay) {
-		Guide(gl.xres, gl.yres);
+		//Guide_Background(GL_TEXTURE_2D, gl.guideTexture, gl.xres, gl.yres);
+		Guide(GL_TEXTURE_2D, gl.guideTexture, gl.xres, gl.yres);
 	}
 }
 void show_credits()
 {
+	Credits_Background(GL_TEXTURE_2D, gl.creditsTexture, gl.xres, gl.yres);
 	extern void joseC(float, float, GLuint);
     	extern void fahadA(int, int, GLuint);
     	extern void rayanA(int, int, GLuint);
@@ -1003,6 +1019,7 @@ void show_credits()
 		fahadA((gl.xres/2 - 300), gl.yres * (1 - offset*3), gl.fahadATexture);
 		rayanA((gl.xres/2 - 300), gl.yres * (1 - offset*4), gl.rayanATexture);
 		diegoC((gl.xres/2 - 300), gl.yres * (1 - offset), gl.diegoCTexture);
+	glEnd();
 }
 
 
