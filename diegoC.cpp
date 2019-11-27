@@ -65,6 +65,7 @@ void Menu(GLenum target, GLuint texture, int xres, int yres)
 {
 	//show the background image
 	glBindTexture(target, texture);
+	glColor3ub(255, 255, 255);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
 		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres); 
