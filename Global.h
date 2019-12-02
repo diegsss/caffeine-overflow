@@ -48,6 +48,8 @@ class Global {
 		double camera[2];
 		int player;
 		bool Credits;
+	//
+		bool keypressed;
 		bool GameMenu;
 		bool GameOver;
 		bool NewGame;
@@ -77,8 +79,10 @@ class Global {
 			GameStart = false;
 			HowToPlay = false;
 
-			sprite.pos.x = 400;
-			sprite.pos.y = 500;
+			sprite.pos.x = 300 ;
+			sprite.pos.y = 400 ;
+		//	sprite.vel.x = 0;
+		//	sprite.vel.y = 0;
 		}
 	Global(Global const&);
 	void operator=(Global const&);

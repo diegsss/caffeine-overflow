@@ -625,17 +625,17 @@ int check_keys(XEvent *e)
 	//Log("key: %i\n", key);
 	if (e->type == KeyRelease) {
 		gl.keys[key]=0;
-		/*if (key == XK_Shift_L || key == XK_Shift_R)
+		if (key == XK_Shift_L || key == XK_Shift_R)
 			shift=0;
-		return 0;*/
+		return 0;
 	}
 	if (e->type == KeyPress) {
 		//std::cout << "press" << std::endl;
 		gl.keys[key]=1;
-		/*if (key == XK_Shift_L || key == XK_Shift_R) {
+		if (key == XK_Shift_L || key == XK_Shift_R) {
 			shift=1;
 			return 0;
-		}*/
+		}
 	} else {
 		return 0;
 	}
@@ -662,7 +662,7 @@ int check_keys(XEvent *e)
 				gl.HowToPlay ^= 1;
 			}
 			break;
-		case XK_s:
+		case XK_x:
 			i++;
 			break;
 		case XK_Return:
@@ -686,10 +686,22 @@ int check_keys(XEvent *e)
 				}
 			}
 			break;
-		case XK_Up:
+		case XK_w:
+			physics();
+			break;
+		case XK_s:
+			physics();
+			break;
+		case XK_a:
+                        physics();
+                        break;
+		case XK_d:
+                        physics();
+                        break;
+			case XK_Up:
 			if (location == 0) {
 				location = 4;
-			} else { 
+			} else {
 				location--;
 			}
 			break;
@@ -699,7 +711,6 @@ int check_keys(XEvent *e)
 			} else {
 				location++;
 			}
-			break;
 		case XK_equal:
 			break;
 		case XK_minus:
@@ -966,7 +977,10 @@ void physics()
 		if (tdif < -0.3)
 			g.mouseThrustOn = false;
 	}
-}*/
+}
+
+*/
+
 
 void render()
 {
@@ -984,6 +998,9 @@ void render()
 	if (gl.GameStart) {
 		drawMap();
 
+	}
+	if (gl.keypressed){
+		physics();
 	}
 	if (gl.GameStart && gl.player) {
 		drawSprite(gl.sprite.pos.x, gl.sprite.pos.y, gl.playerTexture);
