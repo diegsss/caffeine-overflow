@@ -28,7 +28,9 @@ class Global {
 		Sprite sprite;
 		Map map;
 		Image *playerImage;
+		Image *enemyImage;
 		GLuint playerTexture;
+		GLuint enemyTexture;
 		GLuint guideTexture;
 		GLuint creditsTexture;
 		GLuint menuTexture;
@@ -79,8 +81,8 @@ class Global {
 			GameStart = false;
 			HowToPlay = false;
 
-			sprite.pos.x = 300 ;
-			sprite.pos.y = 400 ;
+			sprite.pos.x = 300;
+			sprite.pos.y = 400;
 		//	sprite.vel.x = 0;
 		//	sprite.vel.y = 0;
 		}

@@ -513,8 +513,8 @@ void init_opengl(void)
     	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
     	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 
-    	unsigned char *enemyData = buildAlphaData(&img[22]);
-    	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[22].width, img[22].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, enemyData);
+    	unsigned char *enemyData = buildAlphaData(&img[12]);
+    	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[12].width, img[12].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, enemyData);
     	free(enemyData);*/	
 
 }
