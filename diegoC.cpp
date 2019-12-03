@@ -35,7 +35,7 @@ int nbuttons = 0;
 int location = 0;
 Button button[MAXBUTTONS];
 
-// Map m1(map1);
+Map m1(map1);
 
 void Camera();
 
@@ -392,7 +392,7 @@ void drawSprite(int cx, int cy, GLuint textid)
 		glTexCoord2f(1.0f, 0.0f); glVertex2i(20,20);
 		glTexCoord2f(1.0f, 1.0f); glVertex2i(20,0);
 	glEnd();
-	float h = 25.0;
+	float h = 200.0;
 	float w = h * .5;
 	glPushMatrix();
 	glColor3f(1.0, 1.0, 1.0);
