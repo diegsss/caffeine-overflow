@@ -184,6 +184,33 @@ Image img[12] = {
 	Image("./images/monsterBomb.png"),
 	Image("./images/forest.png")
 };
+unsigned char *buildAlphaData(Image *img) 
+{
+	int i;
+	unsigned char *newdata, *ptr;
+	unsigned char *data = (unsigned char *)img->data;
+	newdata = (unsigned char *)malloc(img->width * img->height * 4);
+	ptr = newdata;
+	unsigned char a,b,c;
+	unsigned char t0 = *(data + 0);
+	unsigned char t1 = *(data + 1);
+	unsigned char t2 = *(data + 2);
+	for (i = 0; i < img->width * img->height *3; i += 3) {
+		a = *(data + 0);
+		b = *(data + 1);
+		c = *(data + 2);
+		*(ptr + 0) = a;
+		*(ptr + 1) = b;
+		*(ptr + 2) = c;
+		*(ptr + 3) = 1;
+		if (a == t0 && b == t1 && c == t2) {
+			*(ptr + 3) = 0;
+		}
+		ptr += 4;
+		data += 3;
+	}
+	return newdata;
+}
 //X Windows variables
 class X11_wrapper {
 private:
@@ -363,35 +390,6 @@ int main()
 	logClose();
 	return 0;
 }
-
-unsigned char *buildAlphaData(Image *img) 
-{
-	int i;
-	unsigned char *newdata, *ptr;
-	unsigned char *data = (unsigned char *)img->data;
-	newdata = (unsigned char *)malloc(img->width * img->height * 4);
-	ptr = newdata;
-	unsigned char a,b,c;
-	unsigned char t0 = *(data + 0);
-	unsigned char t1 = *(data + 1);
-	unsigned char t2 = *(data + 2);
-	for (i = 0; i < img->width * img->height *3; i += 3) {
-		a = *(data + 0);
-		b = *(data + 1);
-		c = *(data + 2);
-		*(ptr + 0) = a;
-		*(ptr + 1) = b;
-		*(ptr + 2) = c;
-		*(ptr + 3) = 1;
-		if (a == t0 && b == t1 && c == t2) {
-			*(ptr + 3) = 0;
-		}
-		ptr += 4;
-		data += 3;
-	}
-	return newdata;
-}
-
 void init_opengl(void)
 {
 	//OpenGL initialization
@@ -502,11 +500,24 @@ void init_opengl(void)
 	glActiveTexture(GL_TEXTURE0);
 
 	glGenTextures(1, &gl.playerTexture);
+	glBindTexture(GL_TEXTURE_2D, gl.playerTexture);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    	//
+    	//must build a new set of data...
+    	unsigned char *playerData = buildAlphaData(&img[10]);
+    	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[10].width, img[10].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, playerData);
+    	free(playerData);
 
+    	/*glBindTexture(GL_TEXTURE_2D, gl.enemyTexture);
+    	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+
+    	unsigned char *enemyData = buildAlphaData(&img[22]);
+    	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[22].width, img[22].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, enemyData);
+    	free(enemyData);*/	
 
 }
-
-
 void normalize2d(Vec v)
 {
 	Flt len = v[0]*v[0] + v[1]*v[1];
@@ -519,7 +530,6 @@ void normalize2d(Vec v)
 	v[0] *= len;
 	v[1] *= len;
 }
-
 void check_mouse(XEvent *e)
 {
 	//Did the mouse move?
@@ -616,7 +626,6 @@ void check_mouse(XEvent *e)
 		savey=100;
 	}
 }
-
 int check_keys(XEvent *e)
 {
 	//keyboard input?
@@ -980,8 +989,6 @@ void physics()
 }
 
 */
-
-
 void render()
 {
 	Rect r;
