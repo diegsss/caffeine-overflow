@@ -445,3 +445,27 @@ void show_credits()
                 diegoC((gl.xres/2 - 300), gl.yres * (1 - offset), gl.diegoCTexture);
         glEnd();
 }
+void HighScores_Background(GLenum target, GLuint texture, int xres, int yres)
+{
+	glBindTexture(target, texture);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres); 
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+}
+void show_scores() 
+{
+        HighScores_Background(GL_TEXTURE_2D, gl.highscoreTexture, gl.xres, gl.yres);
+                glClear(GL_COLOR_BUFFER_BIT);
+                Rect rhighscores;
+                rhighscores.bot = gl.yres * 0.95f;
+                rhighscores.left = gl.xres/2;
+                rhighscores.center = 0;
+                ggprint16(&rhighscores, 16, 0x00ffff00, "HighScores");
+
+}

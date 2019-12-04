@@ -44,6 +44,7 @@ class Global {
 		GLuint guideTexture;
 		GLuint creditsTexture;
 		GLuint menuTexture;
+		GLuint highscoreTexture;
 		GLuint diegoCTexture;
 		GLuint joseCTexture;
 		GLuint fahadATexture;
@@ -67,6 +68,7 @@ class Global {
 		bool NewGame;
 		bool GameStart;
 		bool HowToPlay;
+		bool HighScores;
 		int posArr;
 		bool collsion;
 		int walk;
@@ -90,6 +92,7 @@ class Global {
 			NewGame = true;
 			GameStart = false;
 			HowToPlay = false;
+			HighScores = false;
 			//Player position
 			sprite.pos.x = 300;
 			sprite.pos.y = 400;

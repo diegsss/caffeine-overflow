@@ -66,6 +66,7 @@ bool GameOver = false;
 bool NewGame = true;
 bool StartGame = false;
 bool HowToPlay = false;
+bool HighScores = false;
 //user player
 class Ship {
 public:
@@ -349,6 +350,7 @@ int check_keys(XEvent *e);
 void physics();
 void render();
 void show_credits();
+void show_scores();
 extern void menu();
 extern int nbuttons;
 extern Button button[];
@@ -417,6 +419,12 @@ void init_opengl(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[11].width, img[11].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[11].data);
 	
+	glGenTextures(1, &gl.highscoreTexture);
+	glBindTexture(GL_TEXTURE_2D, gl.highscoreTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[11].width, img[11].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[11].data);
+
 	glGenTextures(1, &gl.guideTexture);
 	glBindTexture(GL_TEXTURE_2D, gl.guideTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -670,6 +678,9 @@ int check_keys(XEvent *e)
 			if (gl.HowToPlay) {
 				gl.HowToPlay ^= 1;
 			}
+			if (gl.HighScores) {
+				gl.HighScores ^= 1;
+			}
 			break;
 		case XK_x:
 			i++;
@@ -686,6 +697,7 @@ int check_keys(XEvent *e)
 						gl.HowToPlay ^= 1;
 						break;
 					case 2:
+						gl.HighScores ^= 1;
 						break;
 					case 3:
 						gl.Credits ^= 1;
@@ -1021,5 +1033,8 @@ void render()
 	if (gl.HowToPlay) {
 		//Guide_Background(GL_TEXTURE_2D, gl.guideTexture, gl.xres, gl.yres);
 		Guide(GL_TEXTURE_2D, gl.guideTexture, gl.xres, gl.yres);
+	}
+	if (gl.HighScores) {
+		show_scores();
 	}
 }
