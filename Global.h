@@ -14,6 +14,7 @@
 #include "Image.h"
 #include "Map.h"
 #include "Sprite.h"
+#include "Enemy.h"
 #include "diegoC.h"
 #include "joseC.h"
 #include "fahadA.h"
@@ -26,11 +27,20 @@ class Global {
 			return instance;
 		}
 		Sprite sprite;
+		Enemy enemy1;
+		Enemy enemy2;
+		Enemy enemy3;
+		Enemy enemy4;
+		Enemy enemy5;
 		Map map;
 		Image *playerImage;
 		Image *enemyImage;
 		GLuint playerTexture;
-		GLuint enemyTexture;
+		GLuint enemy1Texture;
+		GLuint enemy2Texture;
+		GLuint enemy3Texture;
+		GLuint enemy4Texture;
+		GLuint enemy5Texture;
 		GLuint guideTexture;
 		GLuint creditsTexture;
 		GLuint menuTexture;
@@ -80,11 +90,23 @@ class Global {
 			NewGame = true;
 			GameStart = false;
 			HowToPlay = false;
-
+			//Player position
 			sprite.pos.x = 300;
 			sprite.pos.y = 400;
-		//	sprite.vel.x = 0;
-		//	sprite.vel.y = 0;
+			//Enemy position
+			//Still need to add positions
+			/*
+			enemy1.pos.x =
+			enemy1.pos.y =
+			enemy2.pos.x =
+			enemy2.pos.y =
+			enemy3.pos.x =
+			enemy3.pos.y =
+			enemy4.pos.x =
+			enemy4.pos.y =
+			enemy5.pos.x =
+			enemy5.pos.y =
+			*/
 		}
 	Global(Global const&);
 	void operator=(Global const&);

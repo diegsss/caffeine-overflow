@@ -1023,28 +1023,3 @@ void render()
 		Guide(GL_TEXTURE_2D, gl.guideTexture, gl.xres, gl.yres);
 	}
 }
-void show_credits()
-{
-	Credits_Background(GL_TEXTURE_2D, gl.creditsTexture, gl.xres, gl.yres);
-	extern void joseC(float, float, GLuint);
-    	extern void fahadA(int, int, GLuint);
-    	extern void rayanA(int, int, GLuint);
-	extern void diegoC(int, int, GLuint);
-		glClear(GL_COLOR_BUFFER_BIT);
-		Rect rcredits;
-		rcredits.bot = gl.yres * 0.95f;
-		rcredits.left = gl.xres/2;
-		rcredits.center = 0;
-		ggprint16(&rcredits, 16, 0x00ffff00, "Credits");
-
-		// moves pictures so they scale to monitors resolution
-		float offset = 0.18f;
-		joseC((gl.xres/2 - 300), gl.yres * (1 - offset*2), gl.joseCTexture);
-		fahadA((gl.xres/2 - 300), gl.yres * (1 - offset*3), gl.fahadATexture);
-		rayanA((gl.xres/2 - 300), gl.yres * (1 - offset*4), gl.rayanATexture);
-		diegoC((gl.xres/2 - 300), gl.yres * (1 - offset), gl.diegoCTexture);
-	glEnd();
-}
-
-
-
