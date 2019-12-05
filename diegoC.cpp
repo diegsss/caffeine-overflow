@@ -391,8 +391,13 @@ void drawSprite(int cx, int cy, GLuint textid)
 		glTexCoord2f(0.0f, 0.0f); glVertex2i(0,20);
 		glTexCoord2f(1.0f, 0.0f); glVertex2i(20,20);
 		glTexCoord2f(1.0f, 1.0f); glVertex2i(20,0);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0,0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0,20);
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(20,20);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(20,0);
 	glEnd();
-	float h = 200.0;
+	//float h = 25.0;
+	float h = 30.0;
 	float w = h * .5;
 	glPushMatrix();
 	glColor3f(1.0, 1.0, 1.0);
@@ -407,17 +412,14 @@ void drawSprite(int cx, int cy, GLuint textid)
 	float fx = (float)ix / 8.0;
 	float fy = (float)iy / 2.0;
 	glBegin(GL_QUADS);
-	if ( gl.keys[XK_Left] ) {
-		glTexCoord2f(fx+.125, fy + .5); glVertex2i(cx-w, cy-h);
-		glTexCoord2f(fx+.125, fy); glVertex2i(cx-w, cy+h);
-		glTexCoord2f(fx, fy); glVertex2i(cx+w, cy+h);
-		glTexCoord2f(fx, fy + .5); glVertex2i(cx+w, cy-h);
-	} else {
-		glTexCoord2f(fx, fy + .5); glVertex2i(cx-w, cy-h);
+		glTexCoord2f(fx, fy + 1.0);     glVertex2i(cx-w, cy-h);
+		glTexCoord2f(fx, fy);          glVertex2i(cx-w, cy+h);
+		glTexCoord2f(fx+.9999, fy);    glVertex2i(cx+w, cy+h);
+		glTexCoord2f(fx+.9999, fy+1.0); glVertex2i(cx+w, cy-h);
+	/*	glTexCoord2f(fx, fy + .5); glVertex2i(cx-w, cy-h);
 		glTexCoord2f(fx, fy); glVertex2i(cx-w, cy+h);
 		glTexCoord2f(fx+.125, fy); glVertex2i(cx+w, cy+h);
-		glTexCoord2f(fx+.125, fy + .5); glVertex2i(cx+w, cy-h);
-	}
+		glTexCoord2f(fx+.125, fy + .5); glVertex2i(cx+w, cy-h);*/
 	glEnd();
 	glPopMatrix();
 	glBindTexture(GL_TEXTURE_2D, 0);
