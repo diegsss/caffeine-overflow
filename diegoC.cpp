@@ -35,7 +35,7 @@ int nbuttons = 0;
 int location = 0;
 Button button[MAXBUTTONS];
 
-// Map m1(map1);
+Map m1(map1);
 
 void Camera();
 
@@ -65,6 +65,7 @@ void Menu(GLenum target, GLuint texture, int xres, int yres)
 {
 	//show the background image
 	glBindTexture(target, texture);
+	glColor3ub(255, 255, 255);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
 		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres); 
@@ -220,10 +221,19 @@ void Menu(GLenum target, GLuint texture, int xres, int yres)
 		r.center = 1;
 		
 		ggprint16(&r, 0, button[i].text_color, button[i].text);
-	}    
+	} 
+     glEnd();	
 }
-void Guide(int xres, int yres) 
+void Guide(GLenum target, GLuint texture, int xres, int yres) 
 {
+	glBindTexture(target, texture);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres); 
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	Rect HowToPlay;
@@ -240,6 +250,22 @@ void Guide(int xres, int yres)
 	HowToPlay.bot = yres * 0.65f;
 	HowToPlay.left = xres/4;
 	ggprint16(&HowToPlay, 0 ,0xffffffff, "Make it out the maze to win, be careful some tiles have bombs!");
+	
+	glEnd();
+}
+void Credits_Background(GLenum target, GLuint texture, int xres, int yres)
+{
+	glBindTexture(target, texture);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres); 
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	//glEnd();
 
 }
 void generateTexture(int glSize, GLuint &textID, Image img)
@@ -365,8 +391,13 @@ void drawSprite(int cx, int cy, GLuint textid)
 		glTexCoord2f(0.0f, 0.0f); glVertex2i(0,20);
 		glTexCoord2f(1.0f, 0.0f); glVertex2i(20,20);
 		glTexCoord2f(1.0f, 1.0f); glVertex2i(20,0);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0,0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0,20);
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(20,20);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(20,0);
 	glEnd();
-	float h = 50.0;
+	//float h = 25.0;
+	float h = 30.0;
 	float w = h * .5;
 	glPushMatrix();
 	glColor3f(1.0, 1.0, 1.0);
@@ -381,19 +412,62 @@ void drawSprite(int cx, int cy, GLuint textid)
 	float fx = (float)ix / 8.0;
 	float fy = (float)iy / 2.0;
 	glBegin(GL_QUADS);
-	if ( gl.keys[XK_Left] ) {
-		glTexCoord2f(fx+.125, fy + .5); glVertex2i(cx-w, cy-h);
-		glTexCoord2f(fx+.125, fy); glVertex2i(cx-w, cy+h);
-		glTexCoord2f(fx, fy); glVertex2i(cx+w, cy+h);
-		glTexCoord2f(fx, fy + .5); glVertex2i(cx+w, cy-h);
-	} else {
-		glTexCoord2f(fx, fy + .5); glVertex2i(cx-w, cy-h);
+		glTexCoord2f(fx, fy + 1.0);     glVertex2i(cx-w, cy-h);
+		glTexCoord2f(fx, fy);          glVertex2i(cx-w, cy+h);
+		glTexCoord2f(fx+.9999, fy);    glVertex2i(cx+w, cy+h);
+		glTexCoord2f(fx+.9999, fy+1.0); glVertex2i(cx+w, cy-h);
+	/*	glTexCoord2f(fx, fy + .5); glVertex2i(cx-w, cy-h);
 		glTexCoord2f(fx, fy); glVertex2i(cx-w, cy+h);
 		glTexCoord2f(fx+.125, fy); glVertex2i(cx+w, cy+h);
-		glTexCoord2f(fx+.125, fy + .5); glVertex2i(cx+w, cy-h);
-	}
+		glTexCoord2f(fx+.125, fy + .5); glVertex2i(cx+w, cy-h);*/
 	glEnd();
 	glPopMatrix();
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_ALPHA_TEST);
+}
+void show_credits()
+{
+        Credits_Background(GL_TEXTURE_2D, gl.creditsTexture, gl.xres, gl.yres);
+        extern void joseC(float, float, GLuint);
+        extern void fahadA(int, int, GLuint);
+        extern void rayanA(int, int, GLuint);
+        extern void diegoC(int, int, GLuint);
+                glClear(GL_COLOR_BUFFER_BIT);
+                Rect rcredits;
+                rcredits.bot = gl.yres * 0.95f;
+                rcredits.left = gl.xres/2;
+                rcredits.center = 0;
+                ggprint16(&rcredits, 16, 0x00ffff00, "Credits");
+
+                // moves pictures so they scale to monitors resolution
+                float offset = 0.18f;
+                joseC((gl.xres/2 - 300), gl.yres * (1 - offset*2), gl.joseCTexture);
+                fahadA((gl.xres/2 - 300), gl.yres * (1 - offset*3), gl.fahadATexture);
+                rayanA((gl.xres/2 - 300), gl.yres * (1 - offset*4), gl.rayanATexture);
+                diegoC((gl.xres/2 - 300), gl.yres * (1 - offset), gl.diegoCTexture);
+        glEnd();
+}
+void HighScores_Background(GLenum target, GLuint texture, int xres, int yres)
+{
+	glBindTexture(target, texture);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres); 
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+}
+void show_scores() 
+{
+        HighScores_Background(GL_TEXTURE_2D, gl.highscoreTexture, gl.xres, gl.yres);
+                glClear(GL_COLOR_BUFFER_BIT);
+                Rect rhighscores;
+                rhighscores.bot = gl.yres * 0.95f;
+                rhighscores.left = gl.xres/2;
+                rhighscores.center = 0;
+                ggprint16(&rhighscores, 16, 0x00ffff00, "HighScores");
+
 }

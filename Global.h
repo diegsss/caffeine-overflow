@@ -14,6 +14,7 @@
 #include "Image.h"
 #include "Map.h"
 #include "Sprite.h"
+#include "Enemy.h"
 #include "diegoC.h"
 #include "joseC.h"
 #include "fahadA.h"
@@ -26,10 +27,24 @@ class Global {
 			return instance;
 		}
 		Sprite sprite;
+		Enemy enemy1;
+		Enemy enemy2;
+		Enemy enemy3;
+		Enemy enemy4;
+		Enemy enemy5;
 		Map map;
 		Image *playerImage;
+		Image *enemyImage;
 		GLuint playerTexture;
+		GLuint enemyTexture;
+	/*	GLuint enemy2Texture;
+		GLuint enemy3Texture;
+		GLuint enemy4Texture;
+		GLuint enemy5Texture;
+	*/	GLuint guideTexture;
+		GLuint creditsTexture;
 		GLuint menuTexture;
+		GLuint highscoreTexture;
 		GLuint diegoCTexture;
 		GLuint joseCTexture;
 		GLuint fahadATexture;
@@ -46,11 +61,14 @@ class Global {
 		double camera[2];
 		int player;
 		bool Credits;
+	//
+		bool keypressed;
 		bool GameMenu;
 		bool GameOver;
 		bool NewGame;
 		bool GameStart;
 		bool HowToPlay;
+		bool HighScores;
 		int posArr;
 		bool collsion;
 		int walk;
@@ -74,9 +92,24 @@ class Global {
 			NewGame = true;
 			GameStart = false;
 			HowToPlay = false;
-
-			sprite.pos.x = 400;
-			sprite.pos.y = 500;
+			HighScores = false;
+			
+			//Player position
+			sprite.pos.x = 300;
+			sprite.pos.y = 400;
+		
+			//Enemy position
+			enemy1.pos.x = 1000;
+			enemy1.pos.y = 800;
+			enemy2.pos.x = 495;
+			enemy2.pos.y = 670;
+			enemy3.pos.x = 504;
+			enemy3.pos.y = 257;
+			enemy4.pos.x = 647;
+			enemy4.pos.y = 165;
+			enemy5.pos.x = 545;
+			enemy5.pos.y = 571;
+			
 		}
 	Global(Global const&);
 	void operator=(Global const&);

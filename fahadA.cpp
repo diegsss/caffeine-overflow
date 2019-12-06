@@ -8,13 +8,15 @@
  *	
  *
  * */
-
+#include "iostream"
 #include <GL/glx.h>
 #include "fonts.h"
 #include "fahadA.h"
 #include "Global.h"
+#include "Map.h"
 
 static Global &gl = Global::getInstance();
+char map[10] = "map.txt";
 
 void fahadA(int x, int y, GLuint id)
 {
@@ -39,3 +41,41 @@ void fahadA(int x, int y, GLuint id)
 	glEnd();
 	glPopMatrix();
 }
+
+
+
+
+void physics()
+{
+	
+	if (gl.keys[XK_w]) {
+            gl.sprite.pos.y=gl.sprite.pos.y+3; 
+        }
+	if (gl.keys[XK_s]) {
+            gl.sprite.pos.y=gl.sprite.pos.y-3;
+        }
+        if (gl.keys[XK_a]) {
+            gl.sprite.pos.x=gl.sprite.pos.x-3;
+        }
+        if (gl.keys[XK_d]) {
+            gl.sprite.pos.x=gl.sprite.pos.x+3;
+        }
+
+
+}
+/*
+bool isWalkable(int x, int y) {
+    if(x < 0 || y < 0 || x > 101 || y > 101)
+        return false;
+    int ret = gl.map.arr[rows][ncols];
+//#ifdef DEBUG
+    if(ret == 15)
+    return false;
+//#else
+//#endif
+    return ret;
+}
+
+//#endif 
+*/
+

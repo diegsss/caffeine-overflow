@@ -38,5 +38,183 @@ void joseC(float x, float y, GLuint textid)
 	glEnd();
 	glPopMatrix();
 }
+void drawEnemy1Sprite(int cx, int cy, GLuint textid) 
+{
+	
+	glBindTexture(GL_TEXTURE_2D, textid);
+	glColor3ub(0,0,0);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0,0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0,20);
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(20,20);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(20,0);
+	glEnd();
+	float h = 30.0;
+	float w = h * .5;
+	glPushMatrix();
+	glColor3f(1.0, 1.0, 1.0);
+	glBindTexture(GL_TEXTURE_2D, textid);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glColor4ub(255, 255, 255, 255);
+	int ix = gl.walkFrame % 8;
+	int iy = 0;
+	if (gl.walkFrame >= 8) 
+		iy = 1;
+	float fx = (float)ix / 8.0;
+	float fy = (float)iy / 2.0;
+	glBegin(GL_QUADS);
+		glTexCoord2f(fx+.9999, fy + 1.0); glVertex2i(cx-w, cy-h);
+		glTexCoord2f(fx+.9999, fy); glVertex2i(cx-w, cy+h);
+		glTexCoord2f(fx, fy); glVertex2i(cx+w, cy+h);
+		glTexCoord2f(fx, fy + 1.0); glVertex2i(cx+w, cy-h);
+	glEnd();
+	glPopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_ALPHA_TEST);
+}
+void drawEnemy2Sprite(int cx, int cy, GLuint textid) 
+{
+
+	glBindTexture(GL_TEXTURE_2D, textid);
+	glColor3ub(0,0,0);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0,0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0,20);
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(20,20);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(20,0);
+	glEnd();
+	float h = 30.0;
+	float w = h * .5;
+	glPushMatrix();
+	glColor3f(1.0, 1.0, 1.0);
+	glBindTexture(GL_TEXTURE_2D, textid);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glColor4ub(255, 255, 255, 255);
+	int ix = gl.walkFrame % 8;
+	int iy = 0;
+	if (gl.walkFrame >= 8) 
+		iy = 1;
+	float fx = (float)ix / 8.0;
+	float fy = (float)iy / 2.0;
+	glBegin(GL_QUADS);
+		glTexCoord2f(fx+.9999, fy + 1.0); glVertex2i(cx-w, cy-h);
+		glTexCoord2f(fx+.9999, fy); glVertex2i(cx-w, cy+h);
+		glTexCoord2f(fx, fy); glVertex2i(cx+w, cy+h);
+		glTexCoord2f(fx, fy + 1.0); glVertex2i(cx+w, cy-h);
+	glEnd();
+	glPopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_ALPHA_TEST);
 
 
+}
+void drawEnemy3Sprite(int cx, int cy, GLuint textid) 
+{
+
+	glBindTexture(GL_TEXTURE_2D, textid);
+	glColor3ub(0,0,0);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0,0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0,20);
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(20,20);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(20,0);
+	glEnd();
+	float h = 30.0;
+	float w = h * .5;
+	glPushMatrix();
+	glColor3f(1.0, 1.0, 1.0);
+	glBindTexture(GL_TEXTURE_2D, textid);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glColor4ub(255, 255, 255, 255);
+	int ix = gl.walkFrame % 8;
+	int iy = 0;
+	if (gl.walkFrame >= 8) 
+		iy = 1;
+	float fx = (float)ix / 8.0;
+	float fy = (float)iy / 2.0;
+	glBegin(GL_QUADS);
+		glTexCoord2f(fx+.9999, fy + 1.0); glVertex2i(cx-w, cy-h);
+		glTexCoord2f(fx+.9999, fy); glVertex2i(cx-w, cy+h);
+		glTexCoord2f(fx, fy); glVertex2i(cx+w, cy+h);
+		glTexCoord2f(fx, fy + 1.0); glVertex2i(cx+w, cy-h);
+	glEnd();
+	glPopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_ALPHA_TEST);
+
+}
+void drawEnemy4Sprite(int cx, int cy, GLuint textid) 
+{
+
+	glBindTexture(GL_TEXTURE_2D, textid);
+	glColor3ub(0,0,0);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0,0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0,20);
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(20,20);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(20,0);
+	glEnd();
+	float h = 30.0;
+	float w = h * .5;
+	glPushMatrix();
+	glColor3f(1.0, 1.0, 1.0);
+	glBindTexture(GL_TEXTURE_2D, textid);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glColor4ub(255, 255, 255, 255);
+	int ix = gl.walkFrame % 8;
+	int iy = 0;
+	if (gl.walkFrame >= 8) 
+		iy = 1;
+	float fx = (float)ix / 8.0;
+	float fy = (float)iy / 2.0;
+	glBegin(GL_QUADS);
+		glTexCoord2f(fx+.9999, fy + 1.0); glVertex2i(cx-w, cy-h);
+		glTexCoord2f(fx+.9999, fy); glVertex2i(cx-w, cy+h);
+		glTexCoord2f(fx, fy); glVertex2i(cx+w, cy+h);
+		glTexCoord2f(fx, fy + 1.0); glVertex2i(cx+w, cy-h);
+	glEnd();
+	glPopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_ALPHA_TEST);
+}
+void drawEnemy5Sprite(int cx, int cy, GLuint textid) 
+{
+	
+
+	glBindTexture(GL_TEXTURE_2D, textid);
+	glColor3ub(0,0,0);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0,0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0,20);
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(20,20);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(20,0);
+	glEnd();
+	float h = 30.0;
+	float w = h * .5;
+	glPushMatrix();
+	glColor3f(1.0, 1.0, 1.0);
+	glBindTexture(GL_TEXTURE_2D, textid);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glColor4ub(255, 255, 255, 255);
+	int ix = gl.walkFrame % 8;
+	int iy = 0;
+	if (gl.walkFrame >= 8) 
+		iy = 1;
+	float fx = (float)ix / 8.0;
+	float fy = (float)iy / 2.0;
+	glBegin(GL_QUADS);
+		glTexCoord2f(fx+.9999, fy + 1.0); glVertex2i(cx-w, cy-h);
+		glTexCoord2f(fx+.9999, fy); glVertex2i(cx-w, cy+h);
+		glTexCoord2f(fx, fy); glVertex2i(cx+w, cy+h);
+		glTexCoord2f(fx, fy + 1.0); glVertex2i(cx+w, cy-h);
+	glEnd();
+	glPopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_ALPHA_TEST);
+
+}
