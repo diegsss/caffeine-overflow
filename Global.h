@@ -36,12 +36,12 @@ class Global {
 		Image *playerImage;
 		Image *enemyImage;
 		GLuint playerTexture;
-		GLuint enemy1Texture;
-		GLuint enemy2Texture;
+		GLuint enemyTexture;
+	/*	GLuint enemy2Texture;
 		GLuint enemy3Texture;
 		GLuint enemy4Texture;
 		GLuint enemy5Texture;
-		GLuint guideTexture;
+	*/	GLuint guideTexture;
 		GLuint creditsTexture;
 		GLuint menuTexture;
 		GLuint highscoreTexture;
@@ -93,23 +93,23 @@ class Global {
 			GameStart = false;
 			HowToPlay = false;
 			HighScores = false;
+			
 			//Player position
 			sprite.pos.x = 300;
 			sprite.pos.y = 400;
+		
 			//Enemy position
-			//Still need to add positions
-			/*
-			enemy1.pos.x =
-			enemy1.pos.y =
-			enemy2.pos.x =
-			enemy2.pos.y =
-			enemy3.pos.x =
-			enemy3.pos.y =
-			enemy4.pos.x =
-			enemy4.pos.y =
-			enemy5.pos.x =
-			enemy5.pos.y =
-			*/
+			enemy1.pos.x = 1000;
+			enemy1.pos.y = 800;
+			enemy2.pos.x = 495;
+			enemy2.pos.y = 670;
+			enemy3.pos.x = 504;
+			enemy3.pos.y = 257;
+			enemy4.pos.x = 647;
+			enemy4.pos.y = 165;
+			enemy5.pos.x = 545;
+			enemy5.pos.y = 571;
+			
 		}
 	Global(Global const&);
 	void operator=(Global const&);

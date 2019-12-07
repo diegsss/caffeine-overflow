@@ -171,7 +171,7 @@ public:
 	}
 } g;
 
-Image img[12] = {
+Image img[13] = {
 	Image("./images/bomb.png"),
 	Image("./images/joseC.png"),
 	Image("./images/fahadA.png"),
@@ -183,7 +183,8 @@ Image img[12] = {
 	Image("./images/tiles/4.png"),
 	Image("./images/tiles/5.png"),
 	Image("./images/monsterBomb.png"),
-	Image("./images/forest.png")
+	Image("./images/forest.png"),
+	Image("./images/gorilla.png")
 };
 unsigned char *buildAlphaData(Image *img) 
 {
@@ -357,6 +358,11 @@ extern Button button[];
 extern void drawTile(int width, int length, GLuint id);
 extern void drawMap();
 extern void drawSprite(int x, int y, GLuint textid);
+extern void drawEnemy1Sprite(int cx, int cy, GLuint textid);
+extern void drawEnemy2Sprite(int cx, int cy, GLuint textid);
+extern void drawEnemy3Sprite(int cx, int cy, GLuint textid);
+extern void drawEnemy4Sprite(int cx, int cy, GLuint textid);
+extern void drawEnemy5Sprite(int cx, int cy, GLuint textid);
 
 //==========================================================================
 // M A I N
@@ -412,56 +418,64 @@ void init_opengl(void)
 	//Do this to allow fonts
 	glEnable(GL_TEXTURE_2D);
 	initialize_fonts();
-	
+
+// Menu
 	glGenTextures(1, &gl.menuTexture);
 	glBindTexture(GL_TEXTURE_2D, gl.menuTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[11].width, img[11].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[11].data);
-	
+
+// High Score	
 	glGenTextures(1, &gl.highscoreTexture);
 	glBindTexture(GL_TEXTURE_2D, gl.highscoreTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[11].width, img[11].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[11].data);
 
+// Guide
 	glGenTextures(1, &gl.guideTexture);
 	glBindTexture(GL_TEXTURE_2D, gl.guideTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[11].width, img[11].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[11].data);
 
+// Credits
 	glGenTextures(1, &gl.creditsTexture);
 	glBindTexture(GL_TEXTURE_2D, gl.creditsTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[0].width, img[0].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
 
+// Jose C
 	glGenTextures(1, &gl.joseCTexture);
 	glBindTexture(GL_TEXTURE_2D, gl.joseCTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[1].width, img[1].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
 	
+// Fahad A
 	glGenTextures(1, &gl.fahadATexture);
 	glBindTexture(GL_TEXTURE_2D, gl.fahadATexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[2].width, img[2].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[2].data);
 	
-	
+// Rayan A
 	glGenTextures(1, &gl.rayanATexture);
 	glBindTexture(GL_TEXTURE_2D, gl.rayanATexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[3].width, img[3].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
 
+// Diego C
 	glGenTextures(1, &gl.diegoCTexture);
 	glBindTexture(GL_TEXTURE_2D, gl.diegoCTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0 , 3, img[4].width, img[4].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[4].data);
 	
+// Grass Tile
 	glGenTextures(1, &gl.grassTile);
 	glBindTexture(GL_TEXTURE_2D, gl.grassTile);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -471,6 +485,7 @@ void init_opengl(void)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img[5].width, img[5].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
 	glActiveTexture(GL_TEXTURE0);
 
+// Road Tile
 	glGenTextures(1, &gl.roadTile);
 	glBindTexture(GL_TEXTURE_2D, gl.roadTile);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -480,6 +495,7 @@ void init_opengl(void)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img[6].width, img[6].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[6].data);
 	glActiveTexture(GL_TEXTURE0);
 
+// Block Tile
 	glGenTextures(1, &gl.blockTile);
 	glBindTexture(GL_TEXTURE_2D, gl.blockTile);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -489,6 +505,7 @@ void init_opengl(void)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img[7].width, img[7].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[7].data);
 	glActiveTexture(GL_TEXTURE0);
 	
+// Tree Tile
 	glGenTextures(1, &gl.treeTile);
 	glBindTexture(GL_TEXTURE_2D, gl.treeTile);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -498,6 +515,7 @@ void init_opengl(void)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img[8].width, img[8].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[8].data);
 	glActiveTexture(GL_TEXTURE0);
 
+// Water Tile
 	glGenTextures(1, &gl.waterTile);
 	glBindTexture(GL_TEXTURE_2D, gl.waterTile);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -507,6 +525,7 @@ void init_opengl(void)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img[9].width, img[9].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[9].data);
 	glActiveTexture(GL_TEXTURE0);
 
+// Player
 	glGenTextures(1, &gl.playerTexture);
 	glBindTexture(GL_TEXTURE_2D, gl.playerTexture);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
@@ -517,13 +536,56 @@ void init_opengl(void)
     	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[10].width, img[10].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, playerData);
     	free(playerData);
 
-    	/*glBindTexture(GL_TEXTURE_2D, gl.enemyTexture);
+// Enemy 1
+	glGenTextures(1, &gl.enemyTexture);
+    	glBindTexture(GL_TEXTURE_2D, gl.enemyTexture);
     	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
     	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 
     	unsigned char *enemyData = buildAlphaData(&img[12]);
     	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[12].width, img[12].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, enemyData);
-    	free(enemyData);*/	
+    	free(enemyData);
+/*
+// Enemy 2
+	glGenTextures(1, &gl.enemy2Texture);
+    	glBindTexture(GL_TEXTURE_2D, gl.enemy2Texture);
+    	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+
+    	unsigned char *enemyData = buildAlphaData(&img[12]);
+    	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[12].width, img[12].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, enemyData);
+    	free(enemyData);
+
+// Enemy 3
+	glGenTextures(1, &gl.enemy3Texture);
+    	glBindTexture(GL_TEXTURE_2D, gl.enemy3Texture);
+    	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+
+    	unsigned char *enemyData = buildAlphaData(&img[12]);
+    	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[12].width, img[12].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, enemyData);
+    	free(enemyData);
+
+// Enemy 4
+	glGenTextures(1, &gl.enemy4Texture);
+    	glBindTexture(GL_TEXTURE_2D, gl.enemy4Texture);
+    	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+
+    	unsigned char *enemyData = buildAlphaData(&img[12]);
+    	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[12].width, img[12].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, enemyData);
+    	free(enemyData);
+
+// Enemy 5
+	glGenTextures(1, &gl.enemy5Texture);
+    	glBindTexture(GL_TEXTURE_2D, gl.enemy5Texture);
+    	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+
+    	unsigned char *enemyData = buildAlphaData(&img[12]);
+    	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[12].width, img[12].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, enemyData);
+    	free(enemyData);
+*/
 
 }
 void normalize2d(Vec v)
@@ -1023,6 +1085,11 @@ void render()
 	}
 	if (gl.GameStart && gl.player) {
 		drawSprite(gl.sprite.pos.x, gl.sprite.pos.y, gl.playerTexture);
+		drawEnemy1Sprite(gl.enemy1.pos.x, gl.enemy1.pos.y, gl.enemyTexture);
+		drawEnemy2Sprite(gl.enemy2.pos.x, gl.enemy2.pos.y, gl.enemyTexture);
+		drawEnemy3Sprite(gl.enemy3.pos.x, gl.enemy3.pos.y, gl.enemyTexture);
+		drawEnemy4Sprite(gl.enemy4.pos.x, gl.enemy4.pos.y, gl.enemyTexture);
+		drawEnemy5Sprite(gl.enemy5.pos.x, gl.enemy5.pos.y, gl.enemyTexture);
 		//drawMap();
 
 	}
