@@ -47,7 +47,18 @@ void fahadA(int x, int y, GLuint id)
 
 void physics()
 {
-	
+	if (gl.sprite.pos.x < 0){
+	gl.sprite.pos.x = 15;
+	}
+	else if(gl.sprite.pos.x > (float)gl.xres){
+	gl.sprite.pos.x = (float)gl.xres - 15;
+	}
+	if (gl.sprite.pos.y < 0){
+        gl.sprite.pos.y = 15;
+	}
+	else if(gl.sprite.pos.y > (float)gl.yres){    
+        gl.sprite.pos.y = (float)gl.yres - 15;
+	}	
 	if (gl.keys[XK_w]) {
             gl.sprite.pos.y=gl.sprite.pos.y+3; 
         }
