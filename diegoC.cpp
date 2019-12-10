@@ -445,7 +445,7 @@ void show_credits()
                 joseC((gl.xres/2 - 100), gl.yres * (1 - offset*2), gl.joseCTexture);
                 fahadA((gl.xres/2 - 100), gl.yres * (1 - offset*3), gl.fahadATexture);
                 rayanA((gl.xres/2 - 100), gl.yres * (1 - offset*4), gl.rayanATexture);
-                diegoC((gl.xres/2 - 100), gl.yres * (1 - offset), gl.diegoCTexture);
+                diegoC((gl.xres/2 - 100), gl.yres * (1 - offset*5), gl.diegoCTexture);
         glEnd();
 }
 void HighScores_Background(GLenum target, GLuint texture, int xres, int yres)
