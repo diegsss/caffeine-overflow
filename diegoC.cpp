@@ -243,13 +243,13 @@ void Guide(GLenum target, GLuint texture, int xres, int yres)
 	ggprint16(&HowToPlay, 0 ,0xffffffff, "Game Guide");
 	HowToPlay.bot = yres * 0.85f;
 	HowToPlay.left = xres/4;
-	ggprint16(&HowToPlay, 0 ,0xffffffff, "Use arrow keys to move");
+	ggprint16(&HowToPlay, 0 ,0xffffffff, "Use wasd keys to move");
 	HowToPlay.bot = yres * 0.75f;
 	HowToPlay.left = xres/4;
 	ggprint16(&HowToPlay, 0 ,0xffffffff, "You are trapped in a maze and have to escape!");
 	HowToPlay.bot = yres * 0.65f;
 	HowToPlay.left = xres/4;
-	ggprint16(&HowToPlay, 0 ,0xffffffff, "Make it out the maze to win, be careful some tiles have bombs!");
+	ggprint16(&HowToPlay, 0 ,0xffffffff, "Make it out the maze to win!");
 	
 	glEnd();
 }
