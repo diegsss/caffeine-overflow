@@ -19,6 +19,7 @@
 #include "joseC.h"
 #include "fahadA.h"
 #include "rayanA.h"
+#include "Door.h"
 
 class Global {
 	public:
@@ -32,11 +33,16 @@ class Global {
 		Enemy enemy3;
 		Enemy enemy4;
 		Enemy enemy5;
+		Door door1;
+		Door door2;
+		Door door3;
 		Map map;
 		Image *playerImage;
 		Image *enemyImage;
+		Image *doorImage;
 		GLuint playerTexture;
 		GLuint enemyTexture;
+		GLuint doorTexture;
 		GLuint guideTexture;
 		GLuint creditsTexture;
 		GLuint menuTexture;
@@ -106,6 +112,13 @@ class Global {
 			enemy4.pos.y = 165;
 			enemy5.pos.x = 545;
 			enemy5.pos.y = 571;
+
+			door1.pos.x = 670;
+			door1.pos.y = 450;
+			door2.pos.x = 230;
+			door2.pos.y = 650;
+			door3.pos.x = 850;
+			door3.pos.y = 570;
 			
 		}
 	Global(Global const&);

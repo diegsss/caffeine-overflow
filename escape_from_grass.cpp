@@ -185,7 +185,7 @@ Image img[14] = {
 	Image("./images/monsterBomb.png"),
 	Image("./images/forest.png"),
 	Image("./images/gorilla.png"),
-	Image("./images/tiles/6.png")
+	Image("./images/door.png"),
 };
 unsigned char *buildAlphaData(Image *img) 
 {
@@ -365,6 +365,16 @@ extern void drawEnemy3Sprite(int cx, int cy, GLuint textid);
 extern void drawEnemy4Sprite(int cx, int cy, GLuint textid);
 extern void drawEnemy5Sprite(int cx, int cy, GLuint textid);
 extern void enemyMove(int sx, int sy);
+extern void drawDoor1Sprite(int cx,int cy, GLuint textid);
+extern void drawDoor2Sprite(int cx,int cy, GLuint textid);
+extern void drawDoor3Sprite(int cx,int cy, GLuint textid);
+void CheckPos(int x,int y);
+bool isMoving();
+void Move();
+void enemyHit();
+void DrawBoom(int xres,int yres, int x, int y);
+void hitBoom();
+void doorEntered(int x,int y);
 
 //==========================================================================
 // M A I N
@@ -558,7 +568,22 @@ void init_opengl(void)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img[13].width, img[13].height, 0, GL_RGB, GL_UNSIGNED_BYTE, img[13].data);
 	glActiveTexture(GL_TEXTURE0);
 
-/*
+
+
+	//door 1
+	glGenTextures(1, &gl.doorTexture);
+	glBindTexture(GL_TEXTURE_2D, gl.doorTexture);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+
+	unsigned char *doorData = buildAlphaData(&img[13]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[13].width, img[13].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, doorData);
+	free(doorData);	
+	
+	
+	
+	/*
+ 
 	// Enemy 2
 	glGenTextures(1, &gl.enemy2Texture);
     	glBindTexture(GL_TEXTURE_2D, gl.enemy2Texture);
@@ -843,6 +868,11 @@ void render()
 		drawEnemy3Sprite(gl.enemy3.pos.x, gl.enemy3.pos.y, gl.enemyTexture);
 		drawEnemy4Sprite(gl.enemy4.pos.x, gl.enemy4.pos.y, gl.enemyTexture);
 		drawEnemy5Sprite(gl.enemy5.pos.x, gl.enemy5.pos.y, gl.enemyTexture);
+		drawDoor1Sprite(gl.door1.pos.x,gl.door1.pos.y,gl.doorTexture);
+		drawDoor2Sprite(gl.door2.pos.x,gl.door2.pos.y,gl.doorTexture);
+		drawDoor3Sprite(gl.door3.pos.x,gl.door3.pos.y,gl.doorTexture);
+		doorEntered(gl.sprite.pos.x,gl.sprite.pos.y);
+		Move();	
 		//drawMap();
 
 	}
