@@ -37,11 +37,7 @@ class Global {
 		Image *enemyImage;
 		GLuint playerTexture;
 		GLuint enemyTexture;
-	/*	GLuint enemy2Texture;
-		GLuint enemy3Texture;
-		GLuint enemy4Texture;
-		GLuint enemy5Texture;
-	*/	GLuint guideTexture;
+		GLuint guideTexture;
 		GLuint creditsTexture;
 		GLuint menuTexture;
 		GLuint highscoreTexture;
@@ -55,6 +51,7 @@ class Global {
 		GLuint treeTile;
 		GLuint waterTile;
 		GLuint blockTile;
+		GLuint doorTile;
 		int xres;
 		int yres;
 		char keys[65536];

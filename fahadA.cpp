@@ -18,6 +18,7 @@
 static Global &gl = Global::getInstance();
 char map[10] = "map.txt";
 const int Sprite::RADIUS = 5;
+extern void enemyMove(int sx, int sy);
 
 
 
@@ -136,6 +137,7 @@ void physics()
         if (gl.keys[XK_d]) {
             gl.sprite.pos.x=gl.sprite.pos.x+3;
         }
+	enemyMove(gl.sprite.pos.x, gl.sprite.pos.y);
 
 
 }
